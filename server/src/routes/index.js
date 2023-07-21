@@ -8,11 +8,14 @@ const routerUser = require('./routerUser')
 const routerReportEvent = require('./routerReportEvent');
 const routerFilter = require('./routerFilter');
 const routerReviewEvent = require('./routerReviewEvent')
- const routerReviewUser = require('./routerReviewUser');
+const routerReviewUser = require('./routerReviewUser');
 const routerUserEvent = require('./routerUserEvent');
+const routerChatPersonal = require('./routerChatPersonal');
+
 
 router.use('/events', routerEvents); //body
 router.use('/events', routerUserEvent)
+router.use('/events', routerChatPersonal)
 router.use('/filter', routerFilter);
 router.use('/users', routerUser);
 router.use('/reportuser', routerReportUser);

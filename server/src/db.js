@@ -8,23 +8,23 @@ const { DB_USER, DB_PASSWORD, DB_HOST, PGPASSWORD, DB_RENDER } = process.env;
 
 // !! este sequelize es para trabajar en produccion... cuando hay que modificar cosa en la DB
 
-// const sequelize = new Sequelize(
-//   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/nomadlocals`,
-//   {
-//     logging: false,
-//     native: false,
-//   }
-// );
+const sequelize = new Sequelize(
+  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/nomadlocals`,
+  {
+    logging: false,
+    native: false,
+  }
+);
 
 //! este sequelize es para RENDERIZADO... DEPLOY DB en render.s.
 
-const sequelize = new Sequelize(DB_RENDER, {
-  logging: false,
-  native: false,
-  dialectOptions: {
-    ssl: true, // Deshabilitar la conexión SSL/TLS
-  },
-});
+// const sequelize = new Sequelize(DB_RENDER, {
+//   logging: false,
+//   native: false,
+//   dialectOptions: {
+//     ssl: true, // Deshabilitar la conexión SSL/TLS
+//   },
+// });
 
 const basename = path.basename(__filename);
 
@@ -53,9 +53,10 @@ const {
   ReportEvent,
   ReportUser,
   Events,
-  Chat,
   ReviewUser,
   ReviewEvent,
+  ChatEvent,
+  ChatPersonal
 } = sequelize.models;
 
 // Relación n * n entre User y Event
@@ -64,13 +65,26 @@ const {
 Users.belongsToMany(Events, { through: "Users_Events", as: "Events" });
 Events.belongsToMany(Users, { through: "Users_Events", as: "Users" });
 
-// Relación n a 1 entre User y Chat
-Users.hasMany(Chat, { foreignKey: "senderId" });
-Chat.belongsTo(Users, { as: "sender", foreignKey: "senderId" });
+// Relación 1 a n entre Events y ChatEvent
+Events.hasMany(ChatEvent, { foreignKey: "eventId" });
+ChatEvent.belongsTo(Events, { as: "event", foreignKey: "eventId" });
 
-// Relación 1 a n entre Chat y Event
-Events.hasMany(Chat, { foreignKey: "eventId" });
-Chat.belongsTo(Events, { foreignKey: "eventId" });
+
+// Relación n a 1 entre User y ChatEvent
+Users.hasMany(ChatEvent, { foreignKey: "senderId" });
+ChatEvent.belongsTo(Users, { as: "firstName", foreignKey: "senderId" });
+
+// Relación 1 a n entre Events y ChatPersonal new dani
+Events.hasMany(ChatPersonal, { foreignKey: "eventId" });
+ChatPersonal.belongsTo(Events, { as: "event", foreignKey: "eventId" });
+
+// Relación n a 1 entre User y ChatPersonal
+Users.hasMany(ChatPersonal, { foreignKey: "senderId" });
+ChatPersonal.belongsTo(Users, { as: "sender", foreignKey: "senderId" });
+
+Users.hasMany(ChatPersonal, { foreignKey: "receiverId" });
+ChatPersonal.belongsTo(Users, { as: "receiver", foreignKey: "receiverId" });
+
 
 // solucion de foreignKey ReportUsers y eventos...
 // cambios en los nombres de la relacion y nombre del id que reporta
@@ -93,6 +107,8 @@ ReportEvent.belongsTo(Events, { as: "report", foreignKey: "idEventReporte" });
 // Relación 1 a n entre Review y Event
 Events.hasMany(ReviewEvent, { foreignKey: "idEventReview" });
 ReviewEvent.belongsTo(Events, { as: "review", foreignKey: "idEventReview" });
+
+
 
 module.exports = {
   ...sequelize.models,
