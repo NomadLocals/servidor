@@ -37,7 +37,7 @@ server.use(cors());
 
 server.use(router);
 
-conn.sync({ force: false }).then(() => {
+conn.sync({ force: true }).then(() => {
   console.log("Base de datos conectada");
   httpServer.listen(3001, () => {
     console.log(`Servidor para chat iniciado en http://localhost:3001`);
