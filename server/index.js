@@ -48,8 +48,8 @@ conn.sync({ force: true }).then(() => {
 io.on("connection", (socket) => {
   console.log("Se creo un usuario");
 
-  socket.on("chat message", (data) => {
-    io.emit("chat message", data);
+  socket.on("chatEventMessage", (data) => {
+    socket.broadcast.emit("chatEventMessage", data);
   });
 
   // socket.on("ping", (count) => {
