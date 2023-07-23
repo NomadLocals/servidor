@@ -57,7 +57,7 @@ router.put("/:id", async (req, res) => {
     const updatedUser = await updateUserById(id, userData);
     res.status(200).json(updatedUser);
   } catch (error) {
-    res.status(500).json({ message: "Error al actualizar el evento" });
+    res.status(500).json({ message: "Error al actualizar el usuario" });
   }
 });
 
