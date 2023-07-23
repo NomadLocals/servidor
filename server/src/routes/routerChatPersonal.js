@@ -5,7 +5,7 @@ const {
     getPersonalChatsByEvent
 } = require("../controllers/controllerChatPersonal.js");
 
-const io = require("../../index.js");
+// const io = require("../../index.js");
 
 const router = Router();
 

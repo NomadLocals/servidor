@@ -11,11 +11,12 @@ const routerReviewEvent = require('./routerReviewEvent')
 const routerReviewUser = require('./routerReviewUser');
 const routerUserEvent = require('./routerUserEvent');
 const routerChatPersonal = require('./routerChatPersonal');
-
+const routerChatEvent = require('./routerChatEvent');
 
 router.use('/events', routerEvents); //body
 router.use('/events', routerUserEvent)
 router.use('/events', routerChatPersonal)
+router.use('/events', routerChatEvent)
 router.use('/filter', routerFilter);
 router.use('/users', routerUser);
 router.use('/reportuser', routerReportUser);
