@@ -28,8 +28,6 @@ const io = socketIo(httpServer, {
   },
 });
 
-// Configuración de Clerk
-// const clerk = new Clerk(process.env.CLERK_SECRET_KEY);
 
 server.use(morgan("dev"));
 server.use(express.json());
@@ -48,8 +46,8 @@ conn.sync({ force: true }).then(() => {
 io.on("connection", (socket) => {
   console.log("Se creo un usuario");
 
-  socket.on("chat message", (data) => {
-    io.emit("chat message", data);
+  socket.on("chatEventMessage", (data) => {
+    socket.broadcast.emit("chatEventMessage", data);
   });
 
   // socket.on("ping", (count) => {

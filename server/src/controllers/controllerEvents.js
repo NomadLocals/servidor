@@ -1,9 +1,4 @@
-const {
-  Events,
-  ReportEvent,
-  ReviewEvent,
-  Users,
-} = require("../db");
+const { Events, ReportEvent, ReviewEvent, Users } = require("../db");
 
 const getAllEvents = async () => {
   try {
@@ -11,11 +6,11 @@ const getAllEvents = async () => {
       include: [
         {
           model: ReportEvent,
-          as: "ReportEvents",
+          as: "reportEvent",
         },
         {
           model: ReviewEvent,
-          as: "ReviewEvents",
+          as: "reviewEvent",
         },
         {
           model: Users,
@@ -46,13 +41,9 @@ const getEventById = async (id) => {
         {
           model: Users,
           as: "Users",
-          through: { attributes: [] },
         },
       ],
     });
-
-    //todo crear inclusion eventos - reportes - y review ..
-
     return event;
   } catch (error) {
     console.log(error);
@@ -94,8 +85,6 @@ const postEvent = async ({
     await newEvent[0].setUsers(user);
   }
   return newEvent[0];
-  // await newReport[0].setReport(user);
-  // return newReport[0];
 };
 
 // DELETE /events/:id

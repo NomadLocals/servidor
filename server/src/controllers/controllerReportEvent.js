@@ -11,9 +11,9 @@ const postReportEvent = async (
     throw Error("Event not found.");
   }
   const newReport = await ReportEvent.findOrCreate({
-    where: { type, description, userNameUserReporter },
+    where: {type, description, userNameUserReporter },
   });
-  await newReport[0].setReport(event);
+  await newReport[0].setReportEvent(event);
   return newReport[0];
 };
 
