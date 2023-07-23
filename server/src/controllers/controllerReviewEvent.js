@@ -4,22 +4,17 @@ const postReviewEvent = async (
   type,
   description,
   UserNameUserReview,
-  idEventReview
+  idEventReview,
+  score
 ) => {
   const event = await Events.findByPk(idEventReview);
   if (!event) {
     throw Error("Event not found.");
   }
   const newReview = await ReviewEvent.findOrCreate({
-    where: { type, description, UserNameUserReview },
-    include: [
-      {
-        model: Events,
-        as: "review",
-      },
-    ],
+    where: { type, description, UserNameUserReview, score },
   });
-  await newReview[0].setReview(event);
+  await newReview[0].setReviewEvent(event);
   return newReview[0];
 };
 
@@ -29,7 +24,6 @@ const getReviewEvent = async (id) => {
     include: {
       model: Events,
       as: "review",
-      // attributes: ['name', 'activityType'],
     },
   });
   if (review) return review;

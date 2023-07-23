@@ -8,10 +8,10 @@ const {
 } = require('../controllers/controllerReviewEvent');
 
 router.post("/", async (req, res) => {
-const { type, description, UserNameUserReview, idEventReview } = req.body;
+const { type, description, UserNameUserReview, idEventReview, score } = req.body;
 
 try {
-    if (!type || !description  || !idEventReview || !UserNameUserReview) {
+    if (!type || !description  || !idEventReview || !UserNameUserReview || !score) {
     throw Error("I'm sorry I don't receive the complete information");
     } else {
     const dataReviewEvent = await postReviewEvent(
@@ -19,6 +19,7 @@ try {
         description,
         UserNameUserReview,
         idEventReview,
+        score
     );
     res.status(200).json(dataReviewEvent);
     }

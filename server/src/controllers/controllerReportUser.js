@@ -11,16 +11,9 @@ const postReportUser = async (
     throw Error("User not found.");
   }
   const newReport = await ReportUser.findOrCreate({
-    where: { type, description, idUserReporter },
-    include: [
-      {
-        model: Users,
-        as: "report",
-        attributes: ["id"],
-      },
-    ],
-  });
-  await newReport[0].setReport(user);
+    where: { type, description, idUserReporter},
+  })
+  await newReport[0].setReportUser(user);
   return newReport[0];
 };
 
@@ -29,7 +22,7 @@ const getReportById = async (id) => {
     where: { id },
     include: {
       model: Users,
-      as: "report",
+      as: "reportUser",
       attributes: ["userName", "age", "gender"],
     },
     attributes: {

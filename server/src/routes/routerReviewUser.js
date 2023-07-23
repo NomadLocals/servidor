@@ -9,16 +9,16 @@ const {
 } = require('../controllers/controllerReviewUser');
 
 router.post('/', async (req, res) => {
-  const { type, description, UserNameUserReview, idEventReview } = req.body;
+  const { type, description, UserNameUserReview, idUserReview } = req.body;
   try {
-    if (!type || !description  || !idEventReview || !UserNameUserReview) {
+    if (!type || !description  || !idUserReview || !UserNameUserReview) {
       throw Error("I'm sorry I didn't receive the complete information");
     } else {
       const dataReviewUser = await createReviewUser(
         type,
         description,
         UserNameUserReview,
-        idEventReview,
+        idUserReview,
       );
       res.status(200).json(dataReviewUser);
     }

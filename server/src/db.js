@@ -4,7 +4,7 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 
-const { DB_USER, DB_PASSWORD, DB_HOST, PGPASSWORD, DB_RENDER } = process.env;
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_RENDER } = process.env;
 
 // !! este sequelize es para trabajar en produccion... cuando hay que modificar cosa en la DB
 
@@ -58,9 +58,6 @@ const {
   ReviewEvent,
 } = sequelize.models;
 
-// Relación n * n entre User y Event
-//! correccion de nombre de relacion estaban saliendo dos veces la relacion usersEvents
-// por que le faltaba una s en la segunda vez que se nombra UserEvent
 Users.belongsToMany(Events, { through: "Users_Events", as: "Events" });
 Events.belongsToMany(Users, { through: "Users_Events", as: "Users" });
 
@@ -72,27 +69,29 @@ Chat.belongsTo(Users, { as: "sender", foreignKey: "senderId" });
 Events.hasMany(Chat, { foreignKey: "eventId" });
 Chat.belongsTo(Events, { foreignKey: "eventId" });
 
-// solucion de foreignKey ReportUsers y eventos...
-// cambios en los nombres de la relacion y nombre del id que reporta
-
-Users.hasOne(ReportUser, { foreignKey: "idUserReporter" });
-ReportUser.belongsTo(Users, { as: "report", foreignKey: "idUserReporter" });
+Users.hasMany(ReportUser, { as: "reportUser", foreignKey: "idUserReporter" });
+ReportUser.belongsTo(Users, { as: "reportUser", foreignKey: "idUserReporter" });
 
 // Relación con el modelo Users
-Users.hasMany(ReviewUser, { foreignKey: "userId" });
-ReviewUser.belongsTo(Users, { as: "user", foreignKey: "userId" });
-
-// Relación con el modelo Events
-Events.hasMany(ReviewUser, { foreignKey: "eventId" });
-ReviewUser.belongsTo(Events, { as: "event", foreignKey: "eventId" });
+Users.hasMany(ReviewUser, { as: "reviewUser", foreignKey: "userId" });
+ReviewUser.belongsTo(Users, { as: "reviewUser", foreignKey: "userId" });
 
 // Relación 1 a n entre Report y Event
-Events.hasMany(ReportEvent, { foreignKey: "idEventReporte" });
-ReportEvent.belongsTo(Events, { as: "report", foreignKey: "idEventReporte" });
+Events.hasMany(ReportEvent, {
+  as: "reportEvent",
+  foreignKey: "idEventReporte",
+});
+ReportEvent.belongsTo(Events, {
+  as: "reportEvent",
+  foreignKey: "idEventReporte",
+});
 
 // Relación 1 a n entre Review y Event
-Events.hasMany(ReviewEvent, { foreignKey: "idEventReview" });
-ReviewEvent.belongsTo(Events, { as: "review", foreignKey: "idEventReview" });
+Events.hasMany(ReviewEvent, { as: "reviewEvent", foreignKey: "idEventReview" });
+ReviewEvent.belongsTo(Events, {
+  as: "reviewEvent",
+  foreignKey: "idEventReview",
+});
 
 module.exports = {
   ...sequelize.models,

@@ -19,7 +19,7 @@ const router = require("./src/routes");
 const morgan = require("morgan");
 const cors = require("cors");
 const { conn } = require("./src/db.js");
-
+const PORT = 3001;
 const server = express();
 const httpServer = http.createServer(server);
 const io = socketIo(httpServer, {
@@ -28,19 +28,16 @@ const io = socketIo(httpServer, {
   },
 });
 
-// Configuración de Clerk
-// const clerk = new Clerk(process.env.CLERK_SECRET_KEY);
-
 server.use(morgan("dev"));
 server.use(express.json());
 server.use(cors());
 
 server.use(router);
 
-conn.sync({ force: false }).then(() => {
+conn.sync({ force: true }).then(() => {
   console.log("Base de datos conectada");
-  httpServer.listen(3001, () => {
-    console.log(`Servidor para chat iniciado en http://localhost:3001`);
+  httpServer.listen(PORT, () => {
+    console.log(`Servidor para chat iniciado en el ${PORT}`);
   });
 });
 
@@ -48,8 +45,8 @@ conn.sync({ force: false }).then(() => {
 io.on("connection", (socket) => {
   console.log("Se creo un usuario");
 
-  socket.on("chat message", (data) => {
-    io.emit("chat message", data);
+  socket.on("chatEventMessage", (data) => {
+    socket.broadcast.emit("chatEventMessage", data);
   });
 
   // socket.on("ping", (count) => {

@@ -5,11 +5,10 @@ const {
   postReportUser,
   getReportById,
   deleteReportUser,
-} = require("../controllers/controllerRepotUser");
+} = require("../controllers/controllerReportUser");
 
 router.post("/", async (req, res) => {
-  const { type, description, idUserReporter, idUserReporte } = req.body; //datos del reporte
-
+  const { type, description, idUserReporter, idUserReporte } = req.body;
   try {
     if (!type || !description || !idUserReporter || !idUserReporte) {
       throw Error("I'm sorry I don't receive the complete information");
