@@ -48,14 +48,13 @@ io.on("connection", (socket) => {
     usuario: user.userName, // Asegúrate de que userName sea la propiedad correcta en tu modelo de usuario
     message: newEventChat.message,
   };
-
-    io.sockets.in(eventId).emit("chatEventMessage", dataToSend);
+    socket.emit("chatEventMessage", dataToSend);
     socket.broadcast.emit("chatEventMessage", dataToSend);
   });
 });
 
 
-conn.sync({ force: true }).then(() => {
+conn.sync({ force: false }).then(() => {
   console.log("Base de datos conectada");
   // io.listen(3001, () => {
   //   console.log(`Servidor iniciado en ${PORT}`);
