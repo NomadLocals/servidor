@@ -32,11 +32,11 @@ const getEventById = async (id) => {
       include: [
         {
           model: ReportEvent,
-          as: "ReportEvents",
+          as: "reportEvents",
         },
         {
           model: ReviewEvent,
-          as: "ReviewEvents",
+          as: "reviewEvents",
         },
         {
           model: Users,
