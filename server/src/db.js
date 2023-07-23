@@ -77,12 +77,21 @@ Users.hasMany(ReviewUser, { as: "reviewUser", foreignKey: "userId" });
 ReviewUser.belongsTo(Users, { as: "reviewUser", foreignKey: "userId" });
 
 // Relación 1 a n entre Report y Event
-Events.hasMany(ReportEvent, { as: "reportEvent", foreignKey: "idEventReporte" });
-ReportEvent.belongsTo(Events, { as: "reportEvent", foreignKey: "idEventReporte" });
+Events.hasMany(ReportEvent, {
+  as: "reportEvent",
+  foreignKey: "idEventReporte",
+});
+ReportEvent.belongsTo(Events, {
+  as: "reportEvent",
+  foreignKey: "idEventReporte",
+});
 
 // Relación 1 a n entre Review y Event
 Events.hasMany(ReviewEvent, { as: "reviewEvent", foreignKey: "idEventReview" });
-ReviewEvent.belongsTo(Events, { as: "reviewEvent", foreignKey: "idEventReview" });
+ReviewEvent.belongsTo(Events, {
+  as: "reviewEvent",
+  foreignKey: "idEventReview",
+});
 
 module.exports = {
   ...sequelize.models,
