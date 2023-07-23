@@ -86,8 +86,6 @@ const postEvent = async ({
     await newEvent[0].setUsers(user);
   }
   return newEvent[0];
-  // await newReport[0].setReport(user);
-  // return newReport[0];
 };
 
 // DELETE /events/:id
