@@ -12,14 +12,8 @@ const postReviewEvent = async (
   }
   const newReview = await ReviewEvent.findOrCreate({
     where: { type, description, UserNameUserReview },
-    include: [
-      {
-        model: Events,
-        as: "review",
-      },
-    ],
   });
-  await newReview[0].setReview(event);
+  await newReview[0].setReviewEvent(event);
   return newReview[0];
 };
 
@@ -29,7 +23,6 @@ const getReviewEvent = async (id) => {
     include: {
       model: Events,
       as: "review",
-      // attributes: ['name', 'activityType'],
     },
   });
   if (review) return review;

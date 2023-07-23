@@ -9,7 +9,6 @@ const {
 
 router.post("/", async (req, res) => {
 const { type, description, UserNameUserReview, idEventReview } = req.body;
-
 try {
     if (!type || !description  || !idEventReview || !UserNameUserReview) {
     throw Error("I'm sorry I don't receive the complete information");

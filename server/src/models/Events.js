@@ -1,11 +1,3 @@
-//!elimino los campos de max and min ya que son innecesarios
-// eso se hace mediante filter
-//? agrego camelCase
-
-//! revision de entidad reviw
-//todo creo que seria mejor crear el modelo reviw o con las fk del event y quien hace el revio
-//todo igualmente para los reviw de los usuarios si es que se implementa el reviw de user
-
 const { DataTypes } = require("sequelize");
 const { v4: uuidv4 } = require("uuid");
 const uuid = uuidv4();

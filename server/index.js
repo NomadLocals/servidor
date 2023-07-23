@@ -28,8 +28,6 @@ const io = socketIo(httpServer, {
   },
 });
 
-// Configuración de Clerk
-// const clerk = new Clerk(process.env.CLERK_SECRET_KEY);
 
 server.use(morgan("dev"));
 server.use(express.json());
@@ -37,7 +35,7 @@ server.use(cors());
 
 server.use(router);
 
-conn.sync({ force: true }).then(() => {
+conn.sync({ force: false }).then(() => {
   console.log("Base de datos conectada");
   httpServer.listen(3001, () => {
     console.log(`Servidor para chat iniciado en http://localhost:3001`);

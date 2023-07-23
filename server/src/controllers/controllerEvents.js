@@ -1,9 +1,4 @@
-const {
-  Events,
-  ReportEvent,
-  ReviewEvent,
-  Users,
-} = require("../db");
+const { Events, ReportEvent, ReviewEvent, Users } = require("../db");
 
 const getAllEvents = async () => {
   try {
@@ -11,41 +6,17 @@ const getAllEvents = async () => {
       include: [
         {
           model: ReportEvent,
-          as: "ReportEvents",
-          attributes: {
-            exclude: [
-              "createdAt",
-              "updatedAt",
-              "deletedAt",
-              "idEventReporte",
-              "id",
-            ],
-          },
+          as: "reportEvent",
         },
         {
           model: ReviewEvent,
-          as: "ReviewEvents",
-          attributes: {
-            exclude: [
-              "createdAt",
-              "updatedAt",
-              "deletedAt",
-              "idEventReporte",
-              "idEventReview",
-              "id",
-            ],
-          },
+          as: "reviewEvent",
+        },
+        {
+          model: Users,
+          as: "Users",
         },
       ],
-      attributes: {
-        exclude: [
-          "createdAt",
-          "updatedAt",
-          "deletedAt",
-          "idEventReporte",
-          "idEventReview",
-        ],
-      },
     });
 
     return allevents;
@@ -71,13 +42,9 @@ const getEventById = async (id) => {
         {
           model: Users,
           as: "Users",
-          through: { attributes: [] },
         },
       ],
     });
-
-    //todo crear inclusion eventos - reportes - y review ..
-
     return event;
   } catch (error) {
     console.log(error);
