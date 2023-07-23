@@ -1,4 +1,4 @@
-const { Users, ReportUser, Events, Users_Events } = require("../db");
+const { Users, ReportUser, Events, ReviewUser } = require("../db");
 
 const postUser = async ({
   id,
@@ -33,25 +33,6 @@ const postUser = async ({
         phone,
       },
     });
-
-    //  // Crear el usuario en Clerk utilizando la biblioteca de Clerk
-    //  const clerkUser = await clerk.users.create({
-    //   id: newUserCreated[0].id.toString(),
-    //   firstName,
-    //   lastName,
-    //   userName,
-    //   interests,
-    //   place,
-    //   age,
-    //   geolocation,
-    //   gender,
-    //   admin,
-    //   image,
-    //   phone,
-    //   // Puedes agregar otros campos de usuario aquí si los necesitas
-    // });
-
-
     return newUserCreated[0];
   } catch (error) {
     console.error(error);
@@ -62,11 +43,15 @@ const postUser = async ({
 const getAllUsers = async () => {
   try {
     const allUsers = await Users.findAll({
-      include: {
-        model: ReportUser,
-        as: "ReportUser",
-      },
       include: [
+        {
+          model: ReportUser,
+          as: "reportUser",
+        },
+        {
+          model: ReviewUser,
+          as: "reviewUser",
+        },
         {
           model: Events,
           as: "Events",
@@ -100,7 +85,6 @@ const getUserById = async (id) => {
     if (!user) {
       throw new Error("Usuario no encontrado");
     }
-
     return user;
   } catch (error) {
     console.error("Error al obtener el usuario:", error);

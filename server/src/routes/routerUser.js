@@ -25,7 +25,6 @@ router.post("/", async (req, res) => {
     phone,
   } = req.body;
   console.log(req.body);
-
   try {
     const newUser = await postUser({
       id,
@@ -42,9 +41,7 @@ router.post("/", async (req, res) => {
       image,
       phone,
     });
-
     return res.status(200).json(newUser);
-    // }
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error" });
   }
@@ -73,7 +70,6 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   console.log(id);
-
   try {
     const userById = await getUserById(id);
     if (userById.error) return res.status(404).json(userById);

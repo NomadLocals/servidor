@@ -9,16 +9,15 @@ const {
 
 router.post("/", async (req, res) => {
   const { type, description, userNameUserReporter, idEventReporte } = req.body;
-
   try {
-    if (!type || !description  || !idEventReporte || !userNameUserReporter) {
+    if (!type || !description || !idEventReporte || !userNameUserReporter) {
       throw Error("I'm sorry I don't receive the complete information");
     } else {
       const dataReportEvent = await postReportEvent(
         type,
         description,
         userNameUserReporter,
-        idEventReporte,
+        idEventReporte
       );
       res.status(200).json(dataReportEvent);
     }
@@ -40,10 +39,12 @@ router.get("/:id", async (req, res) => {
 router.delete("/delete/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const deleteReport= await deleteReportEvent(id);
+    const deleteReport = await deleteReportEvent(id);
     res.status(200).json(deleteReport);
   } catch (error) {
-    res.status(500).json({ error: "An error occurred while deleting the report" })
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the report" });
   }
 });
 

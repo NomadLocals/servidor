@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
           primaryKey: true,
         },
         type: {
-          type: DataTypes.ENUM('Scam', 'Breach of Contract', 'Violence', 'other'),
+          type: DataTypes.STRING,
           allowNull: false,
         },
         description: {

@@ -40,20 +40,5 @@ const removeUserFromEvent = async (eventId, userId) => {
 
 module.exports = {
   joinEvent,
-  //   addUserToEvent,
   removeUserFromEvent,
-};
-
-// const addUserToEvent = async (req, res) => {
-//   try {
-//     // const { id } = req.params;
-//     const { userId, id } = req.body;
-//     //
-//     const result = await joinEvent(id, userId);
-
-//     res.status(200).json(result);
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send({ message: "User not match to Event" });
-//   }
-// };
+}
