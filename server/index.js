@@ -19,7 +19,7 @@ const router = require("./src/routes");
 const morgan = require("morgan");
 const cors = require("cors");
 const { conn } = require("./src/db.js");
-
+const PORT = 3001
 const server = express();
 const httpServer = http.createServer(server);
 const io = socketIo(httpServer, {
@@ -37,10 +37,10 @@ server.use(cors());
 
 server.use(router);
 
-conn.sync({ force: false }).then(() => {
+conn.sync({ force: true }).then(() => {
   console.log("Base de datos conectada");
-  httpServer.listen(3001, () => {
-    console.log(`Servidor para chat iniciado en http://localhost:3001`);
+  httpServer.listen(PORT, () => {
+    console.log(`Servidor para chat iniciado en el ${PORT}`);
   });
 });
 

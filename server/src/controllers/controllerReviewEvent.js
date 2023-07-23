@@ -4,14 +4,15 @@ const postReviewEvent = async (
   type,
   description,
   UserNameUserReview,
-  idEventReview
+  idEventReview,
+  score
 ) => {
   const event = await Events.findByPk(idEventReview);
   if (!event) {
     throw Error("Event not found.");
   }
   const newReview = await ReviewEvent.findOrCreate({
-    where: { type, description, UserNameUserReview },
+    where: { type, description, UserNameUserReview, score },
     include: [
       {
         model: Events,

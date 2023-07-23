@@ -12,40 +12,16 @@ const getAllEvents = async () => {
         {
           model: ReportEvent,
           as: "ReportEvents",
-          attributes: {
-            exclude: [
-              "createdAt",
-              "updatedAt",
-              "deletedAt",
-              "idEventReporte",
-              "id",
-            ],
-          },
         },
         {
           model: ReviewEvent,
           as: "ReviewEvents",
-          attributes: {
-            exclude: [
-              "createdAt",
-              "updatedAt",
-              "deletedAt",
-              "idEventReporte",
-              "idEventReview",
-              "id",
-            ],
-          },
+        },
+        {
+          model: Users,
+          as: "Users",
         },
       ],
-      attributes: {
-        exclude: [
-          "createdAt",
-          "updatedAt",
-          "deletedAt",
-          "idEventReporte",
-          "idEventReview",
-        ],
-      },
     });
 
     return allevents;
@@ -53,7 +29,6 @@ const getAllEvents = async () => {
     console.log(error);
   }
 };
-
 // GET /events/:id
 const getEventById = async (id) => {
   try {
