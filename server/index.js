@@ -86,8 +86,7 @@ io.on("connection", (socket) => {
   })
 });
   
-  
-conn.sync({ force: false }).then(() => {
+conn.sync({ force: true }).then(() => {
   console.log("Base de datos conectada");
   // io.listen(3001, () => {
   //   console.log(`Servidor iniciado en ${PORT}`);
