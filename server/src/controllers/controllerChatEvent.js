@@ -1,12 +1,13 @@
 const { ChatEvent, Events } = require("../db");
 
 // Crea un nuevo mensaje de chat de evento
-const createEventChat = async ({ eventId, senderId, message }) => {
+const createEventChat = async ({ eventId, senderId, message, userName }) => {
   // console.log(eventId, senderId, message)
   
   const newEventChat = await ChatEvent.create({
     senderId,
     message,
+    userName
   })
 
   await newEventChat.setEvent(eventId)

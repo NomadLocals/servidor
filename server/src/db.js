@@ -76,9 +76,9 @@ ChatEvent.belongsTo(Events, { foreignKey: "eventId", as: "event" });
 Users.hasMany(ChatEvent, { foreignKey: "senderId" });
 ChatEvent.belongsTo(Users, { as: "chatUser", foreignKey: "senderId" });
 
-// Relación 1 a n entre Events y ChatPersonal new dani
-Events.hasMany(ChatPersonal, { foreignKey: "eventId" });
-ChatPersonal.belongsTo(Events, { as: "event", foreignKey: "eventId" });
+// // Relación 1 a n entre Events y ChatPersonal new dani
+// Events.hasMany(ChatPersonal, { foreignKey: "eventId" });
+// ChatPersonal.belongsTo(Events, { as: "event", foreignKey: "eventId" });
 
 // Relación n a 1 entre User y ChatPersonal
 Users.hasMany(ChatPersonal, { foreignKey: "senderId" });

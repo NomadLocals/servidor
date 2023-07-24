@@ -11,7 +11,7 @@ const router = Router();
 
 router.post("/:eventId/chat/event", async (req, res) => {
   const { eventId } = req.params;
-  const { senderId, message } = req.body;
+  const { userName,senderId, message } = req.body;
     // console.log(req.params)
 
   try {
@@ -23,6 +23,7 @@ router.post("/:eventId/chat/event", async (req, res) => {
       eventId,
       senderId,
       message,
+      userName
     });
 
     io.sockets.in(eventId).emit("chatEventMessage", newEventChat);
