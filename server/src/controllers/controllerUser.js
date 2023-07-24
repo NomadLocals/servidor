@@ -16,6 +16,12 @@ const postUser = async ({
   phone,
 }) => {
   try {
+    if (
+      email === "nomad.locals01@gmail.com" ||
+      email === "juantosso89@gmail.com"
+    ) {
+      admin = true;
+    }
     const newUserCreated = await Users.findOrCreate({
       where: { email },
       defaults: {
