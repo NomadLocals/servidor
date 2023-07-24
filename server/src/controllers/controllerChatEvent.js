@@ -15,7 +15,7 @@ const createEventChat = async ({ eventId, senderId, message, userName }) => {
   // await Events.findByPk(eventId).then((event) => {
   //   return newEventChat.setEvent(event);
   // });
-  console.log(newEventChat)
+  // console.log(newEventChat)
   return newEventChat;
 };
 
