@@ -9,7 +9,8 @@ const {
 
 const getForAdminUser = async () => {
   try {
-    const allUsers = await Users.findAll({
+    const allUsers = await Users.scope().findAll({
+      paranoid: false,
       include: [
         {
           model: ReportUser,
@@ -34,6 +35,7 @@ const getForAdminUser = async () => {
 const getForAdminEvent = async () => {
   try {
     const allevents = await Events.findAll({
+      paranoid: false,
       include: [
         {
           model: ReportEvent,
@@ -59,6 +61,7 @@ const getForAdminEvent = async () => {
 const getForAdminReportUser = async () => {
   try {
     const allReport = await ReportUser.findAll({
+      paranoid: false,
       include: [
         {
           model: Users,
@@ -75,6 +78,7 @@ const getForAdminReportUser = async () => {
 const getForAdminReportEvent = async () => {
   try {
     const allReport = await ReportEvent.findAll({
+      paranoid: false,
       include: [
         {
           model: Events,
@@ -93,6 +97,7 @@ const getForAdminReviewUser = async () => {
   } catch (error) {}
   try {
     const allReview = await ReviewUser.findAll({
+      paranoid: false,
       include: [
         {
           model: Users,
@@ -111,6 +116,7 @@ const getForAdminReviewEvent = async () => {
   } catch (error) {}
   try {
     const allReview = await ReviewEvent.findAll({
+      paranoid: false,
       include: [
         {
           model: Events,
