@@ -6,20 +6,19 @@ const {
     createPersonalChat
 } = require("../controllers/controllerChatPersonal.js");
 
-// const io = require("../../index.js");
 
 const router = Router();
 
-router.post('/chat/personal', async (req, res) => {
-    const { senderId, receiverId } = req.body
-    try {
-        const newChat = await startChatPersonal( senderId, receiverId);
-    return res.status(200).json(newChat);
-    } catch (error) {
-        console.log(error.message);
-        return res.status(500).json({ message: "Error al iniciar el chat personal." });
-    }
-})
+// router.post('/chat/personal', async (req, res) => {
+//     const { senderId, receiverId } = req.body
+//     try {
+//         const newChat = await startChatPersonal( senderId, receiverId);
+//     return res.status(200).json(newChat);
+//     } catch (error) {
+//         console.log(error.message);
+//         return res.status(500).json({ message: "Error al iniciar el chat personal." });
+//     }
+// })
 
 router.post("/chat/personal", async (req, res) => {
 const { senderId, receiverId, message } = req.body;
@@ -32,7 +31,7 @@ try {
     senderId,
     receiverId,
     message,
-    chatId,
+    senderUserName
     });
 
     return res.status(200).json(newPersonalChat);
@@ -44,18 +43,22 @@ try {
 }
 });
 
-// router.get("/chat/personal", async (req, res) => {
-// const { eventId } = req.params;
-// try {
-//     const personalChats = await getPersonalChatsByEvent(eventId);
-
-//     return res.status(200).json(personalChats);
-// } catch (error) {
-//     console.log(error);
-//     return res
-//     .status(500)
-//     .json({ message: "Error al obtener los chats personales." });
-// }
-// });
+router.get("/chat/personal", async (req, res) => {
+    const { senderId, receiverId } = req.query; // Use query parameters for GET request
+    try {
+      if (!senderId || !receiverId) {
+        throw Error("Falta información para obtener el chat personal.");
+      }
+  
+      const personalChats = await getPersonalChatsByUsers(senderId, receiverId);
+  
+      return res.status(200).json(personalChats);
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .json({ message: "Error al obtener los chats personales." });
+    }
+  });
 
 module.exports = router;
