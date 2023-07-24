@@ -34,7 +34,7 @@ const getForAdminUser = async () => {
 
 const getForAdminEvent = async () => {
   try {
-    const allevents = await Events.findAll({
+    const allevents = await Events.scope().findAll({
       paranoid: false,
       include: [
         {
@@ -60,7 +60,7 @@ const getForAdminEvent = async () => {
 
 const getForAdminReportUser = async () => {
   try {
-    const allReport = await ReportUser.findAll({
+    const allReport = await ReportUser.scope().findAll({
       paranoid: false,
       include: [
         {
@@ -77,7 +77,7 @@ const getForAdminReportUser = async () => {
 
 const getForAdminReportEvent = async () => {
   try {
-    const allReport = await ReportEvent.findAll({
+    const allReport = await ReportEvent.scope().findAll({
       paranoid: false,
       include: [
         {
@@ -96,7 +96,7 @@ const getForAdminReviewUser = async () => {
   try {
   } catch (error) {}
   try {
-    const allReview = await ReviewUser.findAll({
+    const allReview = await ReviewUser.scope().findAll({
       paranoid: false,
       include: [
         {
@@ -115,7 +115,7 @@ const getForAdminReviewEvent = async () => {
   try {
   } catch (error) {}
   try {
-    const allReview = await ReviewEvent.findAll({
+    const allReview = await ReviewEvent.scope().findAll({
       paranoid: false,
       include: [
         {
