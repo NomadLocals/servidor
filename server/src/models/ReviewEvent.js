@@ -12,7 +12,7 @@ module.exports = (sequelize) => {
         primaryKey: true,
       },
       type: {
-        type: DataTypes.ENUM("Scam", "Breach of Contract", "Violence", "other"),
+        type: DataTypes.STRING,
         allowNull: false,
       },
       description: {
@@ -22,6 +22,10 @@ module.exports = (sequelize) => {
       //id del user que hace el reporte
       UserNameUserReview: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      score: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

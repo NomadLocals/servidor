@@ -4,19 +4,16 @@ const createReviewUser = async (
   type,
   description,
   UserNameUserReview,
-  idEventReview
+  idUserReview
 ) => {
-  const user = await Users.findByPk(idEventReview);
+  const user = await Users.findByPk(idUserReview);
   if (!user) {
     throw Error('User not found.');
   }
   const newReviewUser = await ReviewUser.findOrCreate({
     where: { type, description, UserNameUserReview },
-    include: [{
-      model: Users,
-    }],
   });
-  await newReviewUser[0].setReview(user);
+  await newReviewUser[0].setReviewUser(user);
   return newReviewUser[0];
 };
 

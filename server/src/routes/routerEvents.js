@@ -55,7 +55,6 @@ router.post("/", async (req, res) => {
         minCost,
         active,
       });
-
       return res.status(200).json(newEvent);
     }
   } catch (error) {
@@ -66,7 +65,6 @@ router.post("/", async (req, res) => {
 
 router.delete("/delete/:id", async (req, res) => {
   const { id } = req.params;
-
   try {
     const event = await deleteEventById(id);
     if (event.message) {
@@ -106,11 +104,9 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-
   try {
     if (id) {
       const eventById = await getEventById(id);
-
       if (eventById.error) return res.status(404).json(eventById);
       return res.status(200).json(eventById);
     } else {
