@@ -9,6 +9,8 @@ const {
   getForAdminReportUser,
   getForAdminEvent,
   getForAdminUser,
+  getForAdminResetUser,
+  getForAdminResetEvent,
 } = require("../controllers/controllerAdmin");
 
 router.get('/admin/:id/users', async (req, res) => {
@@ -121,6 +123,40 @@ router.put("/admin/:id/put/user/", async (req, res) => {
   }
   } catch (error) {
     res.status(500).json({ message: "Error al actualizar el evento" });
+  }
+});
+
+router.get('/admin/:id/userreset', async (req, res) => {
+  const { id } = req.params;
+  const { idUser } = req.query;
+  try {
+    const isAdmin = await Users.findByPk(id)
+    if (isAdmin.admin) {
+      const user = await getForAdminResetUser(idUser);
+      if (users) return res.status(200).json(user);
+      return res.status(404).json({error: 'Lo sentimos no pudimos obtener los usuarios'});
+    } else {
+      res.status(404).json({error: 'Lo sentimos Usted no es un ADMINISTRADOR'});
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+router.get('/admin/:id/eventreset', async (req, res) => {
+  const { id } = req.params;
+  const { idEvent } = req.query;
+  try {
+    const isAdmin = await Users.findByPk(id)
+    if (isAdmin.admin) {
+      const event = await getForAdminResetEvent(idEvent);
+      if (event) return res.status(200).json(event);
+      return res.status(404).json({error: 'Lo sentimos no pudimos obtener los usuarios'});
+    } else {
+      res.status(404).json({error: 'Lo sentimos Usted no es un ADMINISTRADOR'});
+    }
+  } catch (error) {
+    console.log(error.message);
   }
 });
 
