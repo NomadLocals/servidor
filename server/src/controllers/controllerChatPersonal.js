@@ -1,6 +1,6 @@
 const { ChatPersonal, Users, Events } = require("../db.js");
-const { Sequelize, Op } = require('sequelize');
-const shortid = require("shortid");
+const { Op } = require('sequelize');
+
 
 const createPersonalChat = async ({
     senderId,
@@ -20,33 +20,12 @@ const createPersonalChat = async ({
       // Asociar el chat personal con los usuarios correspondientes
       await chatPersonal.setSender(senderId);
       await chatPersonal.setReceiver(receiverId);
-    
-  
-      // Emitir el evento de Socket.IO para notificar sobre el nuevo chat personal
-      // io.to(senderId).emit("personalChat", chatPersonal);
-      // io.to(receiverId).emit("personalChat", chatPersonal);
   
       return chatPersonal;
     } catch (error) {
       console.error(error);
     }
   };
-  
-  // const getPersonalChats = async (senderId, receiverId) => {
-  //   try {
-  //     const chats = await ChatPersonal.findAll({
-  //       where: { senderId, receiverId },
-  //       include: [
-  //         { model: Users, as: "sender", attributes: ["id", "userName"] },
-  //         { model: Users, as: "receiver", attributes: ["id", "userName"] },
-  //       ],
-  //     });
-  
-  //     return chats;
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const startChatPersonal = async ({senderId, receiverId}) => {
     console.log(senderId)
@@ -87,8 +66,29 @@ const createPersonalChat = async ({
     }
   };
 
+  const getPersonalChatsByUsers = async (senderId, receiverId) => {
+    try {
+      const chats = await ChatPersonal.findAll({
+        where: {
+          [Op.or]: [
+            { senderId: senderId, receiverId: receiverId },
+            { senderId: receiverId, receiverId: senderId },
+          ],
+        },
+        include: [
+          { model: Users, as: "sender", attributes: ["id", "userName"] },
+          { model: Users, as: "receiver", attributes: ["id", "userName"] },
+        ],
+      });
+  
+      return chats;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 module.exports = {
     startChatPersonal,
-    // getPersonalChats,
-    startChatPersonal
+    getPersonalChatsByUsers,
+    createPersonalChat
 }
