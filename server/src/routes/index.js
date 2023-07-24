@@ -13,13 +13,13 @@ const routerUserEvent = require('./routerUserEvent');
 const routerAdmins = require('./routerAdmins');
 
 router.use('/events', routerEvents); //body
-router.use('/events', routerUserEvent)
-router.use('/filter', routerFilter);
-router.use('/users', routerUser);
 router.use('/reportuser', routerReportUser);
+router.use('/users', routerUser);
 router.use('/reportevent', routerReportEvent);
+router.use('/filter', routerFilter);
 router.use('/reviewevent', routerReviewEvent);
 router.use('/reviewuser', routerReviewUser);
+router.use('/events', routerUserEvent)
 router.use('/', routerAdmins);
 
 

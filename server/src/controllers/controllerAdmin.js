@@ -130,6 +130,20 @@ const getForAdminReviewEvent = async () => {
   }
 };
 
+const putForAdminUser = async (userData, idPut) => {
+  try {
+    const user = await Users.findByPk(idPut);
+    if (!user) {
+      return { message: "Evento no encontrado" };
+    }
+    await user.update(userData);
+    const updatedUser = await Users.findByPk(idPut);
+    return updatedUser;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   getForAdminReviewEvent,
   getForAdminReviewUser,
@@ -137,4 +151,5 @@ module.exports = {
   getForAdminReportUser,
   getForAdminEvent,
   getForAdminUser,
+  putForAdminUser
 };

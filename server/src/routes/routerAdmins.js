@@ -107,5 +107,22 @@ router.get('/admin/:id/reviewevent', async (req, res) => {
   }
 });
 
+router.put("/admin/:id/put/user/", async (req, res) => {
+  const { id } = req.params;
+  const userData = req.body;
+  const idPut = req.body;
+  try {
+    const isAdmin = await Users.findByPk(id)
+    if (isAdmin.admin) {
+    const updatedUser = await putForAdminUser(userData, idPut);
+    res.status(200).json(updatedUser);
+  } else {
+    res.status(404).json({error: 'Lo sentimos Usted no es un ADMINISTRADOR'});
+  }
+  } catch (error) {
+    res.status(500).json({ message: "Error al actualizar el evento" });
+  }
+});
+
 module.exports =  router;
 
