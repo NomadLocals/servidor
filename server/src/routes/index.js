@@ -7,14 +7,18 @@ const routerUser = require('./routerUser')
 const routerReportUser = require('./routerReportUser');
 const routerReviewUser = require('./routerReviewUser');
 const routerUserEvent = require("./routerUserEvent");
+const routerReportEvent = require('./routerReportEvent');
+const routerReviewEvent = require('./routerReviewEvent');
 const routerAdmins = require("./routerAdmins");
 const routerChatPersonal = require('./routerChatPersonal');
 const routerChatEvent = require('./routerChatEvent');
 const routerSendMail = require("./routerSendMail");
+const routerFilter = require('./routerFilter');
 
 //todos declaracion de rutas
 //* rutas de usuarios
 router.use("/reportuser", routerReportUser);
+router.use("/reviewuser", routerReviewUser);
 router.use("/users", routerUser);
 router.use("/reportevent", routerReportEvent);
 router.use("/reviewevent", routerReviewEvent);
