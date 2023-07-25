@@ -1,8 +1,7 @@
 const { Router } = require("express");
-
+const io = require('../../index.js')
 const {
-    startChatPersonal,
-    getPersonalChats,
+    getPersonalChatsByUsers,
     createPersonalChat
 } = require("../controllers/controllerChatPersonal.js");
 
@@ -20,19 +19,27 @@ const router = Router();
 //     }
 // })
 
-router.post("/chat/personal", async (req, res) => {
-const { senderId, receiverId, message } = req.body;
+router.post("/", async (req, res) => {
+const { senderUserName, senderId, receiverId, message } = req.body;
 try {
-    if (  !senderId || !receiverId) {
+    if (  
+        !senderId ||
+        !receiverId ||
+        !senderUserName ||
+        !message
+         ) {
     throw Error("Falta información para crear el chat personal.");
     }
-
+    
+   
     const newPersonalChat = await createPersonalChat({
     senderId,
     receiverId,
     message,
     senderUserName
     });
+    
+    io.sockets.in(roomName).emit("chatPersonalMessage", newPersonalChat);
 
     return res.status(200).json(newPersonalChat);
 } catch (error) {
@@ -43,15 +50,15 @@ try {
 }
 });
 
-router.get("/chat/personal", async (req, res) => {
-    const { senderId, receiverId } = req.query; // Use query parameters for GET request
+router.get("/:senderId/:receiverId", async (req, res) => {
+    const { senderId, receiverId } = req.params; 
     try {
       if (!senderId || !receiverId) {
         throw Error("Falta información para obtener el chat personal.");
       }
   
       const personalChats = await getPersonalChatsByUsers(senderId, receiverId);
-  
+      console.log(personalChats);
       return res.status(200).json(personalChats);
     } catch (error) {
       console.log(error);

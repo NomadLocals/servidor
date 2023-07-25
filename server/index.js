@@ -1,7 +1,8 @@
-const { conn, Users } = require("./src/db.js");
+const { conn, Users, ChatPersonal } = require("./src/db.js");
 require("dotenv").config();
 const {Server} = require('socket.io');
 const http = require('http');
+const { Op } = require('sequelize');
 
 const server = require('./src/server.js');
 const PORT = 3001
@@ -20,44 +21,64 @@ const io  = new Server(app, {
 
 // chat socket.io
 const {createEventChat, getEventChatsByEvent } = require ('./src/controllers/controllerChatEvent.js')
-const { createPersonalChat, getPersonalChatsByEvent } = require ('./src/controllers/controllerChatPersonal.js')
+const { createPersonalChat, getPersonalChatsByUsers } = require ('./src/controllers/controllerChatPersonal.js')
 io.on("connection", (socket) => {
   console.log(`client connected: ${socket.id}`);
 
-  // socket.on("startPersonalChat", async ({userName, senderId, receiverId}) => {
-  //   console.log(senderId)
-  //   console.log(receiverId)
+  socket.on("joinPersonalChat", (receiverId) => {
+    const roomName = `${socket.id}-${receiverId}`;
+    socket.join(roomName);
+  });
+
+  // socket.on("chatPersonalMessage", async ({ senderId, receiverId, senderUserName, message }) => {
   //   try {
-  //         const newPersonalChat = await startChatPersonal({
-  //           message,
-  //           senderId,
-  //           receiverId,
-  //           senderUserName
-  //         });
-          
-    
-  //         // Emite el evento "personalChatCreated" con el nuevo chat personal (incluyendo mensajes)
-  //         io.to(senderId).emit("personalChatCreated", newPersonalChat);
-  //         io.to(receiverId).emit("personalChatCreated", newPersonalChat);
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
+  //     // Crear el chat personal en la base de datos si no existe
+  //     const existingChat = await ChatPersonal.findOne({
+  //       where: {
+  //         senderId: senderId,
+  //         receiverId: receiverId,
+  //         [Op.or]: [
+  //           { senderId: senderId, receiverId: receiverId },
+  //           { senderId: receiverId, receiverId: senderId },
+  //         ],
+  //       },
+  //       include: [
+  //         { model: Users, as: "sender", attributes: ["id", "userName"] },
+  //         { model: Users, as: "receiver", attributes: ["id", "userName"] },
+  //       ],
+  //     });
+
+  //     if (!existingChat) {
+  //       await createPersonalChat({ senderUserName, senderId, receiverId, message });
+  //     }
+
+  //     // Emitir el evento "chatPersonalMessage" con el nuevo mensaje
+  //     const messageData = {
+  //       senderId: senderId,
+  //       senderUsername: senderUserName,
+  //       message: message,
+  //     };
+  //     const roomName = `${senderId}-${receiverId}`;
+  //     socket.to(roomName).emit("chatPersonalMessage", messageData);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
   // });
-
   socket.on("chatPersonalMessage", async ({senderId, receiverId, senderUserName, message}) => {
+  const newPersonalChat = await createPersonalChat({senderId, receiverId, senderUserName, message})
 
-    const newPersonalChat = await createPersonalChat({senderId, receiverId, senderUserName, message})
-
-    const user = await Users.findByPk(senderId)
+    // const user = await Users.findByPk(senderId)
     // const message = `${message}`;
     const messageData = {
-      senderId: senderId,
-      senderUsername: senderUserName,
-      message: message,
-      receiverId
+      senderId: "user",
+      senderUsername: "dani",
+      message: "messagewwssssssss",
+      receiverId: "user2"
     };
     const roomName = `${senderId}-${receiverId}`;
     socket.to(roomName).emit("chatPersonalMessage", messageData);
+    socket.emit("chatPersonalMessage", messageData )
+    socket.broadcast.emit("chatPersonalMessage", messageData)
   });
 
 
