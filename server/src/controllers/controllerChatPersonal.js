@@ -77,8 +77,8 @@ const createPersonalChat = async ({
           ],
         },
         include: [
-          { model: Users, as: "sender", attributes: ["id", "userName"] },
-          { model: Users, as: "receiver", attributes: ["id", "userName"] },
+          { model: Users, as: "sender", attributes: ["userName"] },
+          { model: Users, as: "receiver", attributes: ["userName"] },
         ],
       });
         console.log(chats)
