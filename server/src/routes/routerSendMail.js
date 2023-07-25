@@ -208,4 +208,55 @@ router.post("/retrieve", (req, res) => {
   }
 });
 
+//---------------------Eliminacion de eventos ---------------------
+router.post("/delete-event", (req, res) => {
+  try {
+    const { email, event } = req.body;
+
+    const contentHtml = `
+    <p> Estimado/a participante,</p>
+
+    <p>Lamentamos informarte que el evento "${event}" en el que te habías registrado ha sido cancelado y eliminado de nuestro calendario.</p>
+    <p>Entendemos que esto puede ser decepcionante, y nos disculpamos por cualquier inconveniente que esto pueda haber causado. La decisión de cancelar el evento fue tomada después de una cuidadosa consideración para garantizar la mejor experiencia para todos nuestros participantes.</p>
+    <p>Te agradecemos tu interés en el evento y tu apoyo a nuestra comunidad. Continuaremos organizando futuros eventos y esperamos verte en uno próximo.</p>
+    <p>Si tienes alguna pregunta o inquietud, no dudes en ponerte en contacto con nuestro equipo de soporte en [correo de soporte] o utilizando el formulario de contacto en nuestro sitio web.</p>
+    <br/>
+    <p>Gracias por ser parte de nuestra comunidad.</p>
+    <p>Equipo de Nomad Locals</p>
+    `;
+
+    async function sendMail() {
+      try {
+        const accessToken = await oAuth2Client.getAccessToken();
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            type: "OAuth2",
+            user: "nomad.locals01@gmail.com",
+            clientId: CLIENT_ID,
+            clientSecret: CLIENT_SECRET,
+            refreshToken: REFRESH_TOKEN,
+            accessToken,
+          },
+        });
+        const mailOptions = {
+          from: "Nomad Locals <nomad.locals01@gmail.com>",
+          to: email,
+          subject: `Nomad Locals:   Importante: Cancelación de evento - ${event}`,
+          html: contentHtml,
+        };
+        const result = transporter.sendMail(mailOptions);
+        return result;
+      } catch (error) {
+        res.status(400).send(error.message);
+      }
+    }
+    sendMail()
+      .then((result) => res.status(200).send("enviado"))
+      .catch((error) => console.log(error.message));
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
 module.exports = router;
