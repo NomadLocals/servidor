@@ -95,7 +95,7 @@ router.post("/newEventCreated", (req, res) => {
         const mailOptions = {
           from: "Nomad Locals <nomad.locals01@gmail.com>",
           to: email,
-          subject: "¡Te damos la bienvenida a Nomad Locals!",
+          subject: "¡Has creado un encuentro exitosamente en Nomad Locals!",
           html: contentHtml,
         };
         const result = transporter.sendMail(mailOptions);
