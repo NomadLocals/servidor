@@ -25,8 +25,7 @@ try {
     if (  
         !senderId ||
         !receiverId ||
-        !senderUserName ||
-        !message
+        !senderUserName
          ) {
     throw Error("Falta información para crear el chat personal.");
     }
@@ -39,6 +38,7 @@ try {
     senderUserName
     });
     
+    const roomName = `${senderId}-${receiverId}`;
     io.sockets.in(roomName).emit("chatPersonalMessage", newPersonalChat);
 
     return res.status(200).json(newPersonalChat);
@@ -50,8 +50,8 @@ try {
 }
 });
 
-router.get("/:senderId/:receiverId", async (req, res) => {
-    const { senderId, receiverId } = req.params; 
+router.get("/", async (req, res) => {
+    const { senderId, receiverId } = req.query; 
     try {
       if (!senderId || !receiverId) {
         throw Error("Falta información para obtener el chat personal.");

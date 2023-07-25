@@ -11,10 +11,10 @@ const createPersonalChat = async ({
     try {
       // Crear el chat personal con los datos proporcionados
       const chatPersonal = await ChatPersonal.create({
-        senderId: senderId,
-        receiverId: receiverId,
-        message: message,
-        senderUserName: senderUserName,
+        senderId,
+        receiverId ,
+        message,
+        senderUserName
       });
   
       // Asociar el chat personal con los usuarios correspondientes
@@ -81,7 +81,7 @@ const createPersonalChat = async ({
           { model: Users, as: "receiver", attributes: ["id", "userName"] },
         ],
       });
-  
+        console.log(chats)
       return chats;
     } catch (error) {
       console.error(error);
