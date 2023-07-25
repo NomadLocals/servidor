@@ -8,6 +8,7 @@ const server = express();
 server.use(morgan("dev"));
 server.use(express.json());
 
+server.use(cors())
 
 server.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
