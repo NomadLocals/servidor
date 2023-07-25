@@ -19,7 +19,7 @@ const router = Router();
 //     }
 // })
 
-router.post("/", async (req, res) => {
+router.post("/chat/personal", async (req, res) => {
 const { senderUserName, senderId, receiverId, message } = req.body;
 try {
     if (  
@@ -50,7 +50,7 @@ try {
 }
 });
 
-router.get("/", async (req, res) => {
+router.get("/chat/personal", async (req, res) => {
     const { senderId, receiverId } = req.query; // Use query parameters for GET request
     try {
       if (!senderId || !receiverId) {

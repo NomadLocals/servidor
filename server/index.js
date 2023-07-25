@@ -63,21 +63,6 @@ io.on("connection", (socket) => {
     socket.broadcast.emit('getPersonalMessage', allMessages)
   })
 
-  // socket.on("chatPersonalMessage", async ({senderId, receiverId, senderUserName, message}) => {
-
-  //   const newPersonalChat = await createPersonalChat({senderId, receiverId, senderUserName, message})
-
-  //   const user = await Users.findByPk(senderId)
-  //   // const message = `${message}`;
-  //   const messageData = {
-  //     senderId: senderId,
-  //     senderUsername: senderUserName,
-  //     message: message,
-  //     receiverId: receiverId
-  //   };
-  //   const roomName = `${senderId}-${receiverId}`;
-  //   socket.to(roomName).emit("chatPersonalMessage", messageData);
-  // });
 
 
   socket.on("chatEventMessage", async ({ userName,eventId, senderId, message }) => {
