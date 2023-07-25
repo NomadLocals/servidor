@@ -1,27 +1,34 @@
 const { Router } = require("express");
 const router = Router();
 
-//? importacion de routes
-const routerEvents = require("./routerEvents");
-const routerReportUser = require("./routerReportUser");
-const routerUser = require("./routerUser");
-const routerReportEvent = require("./routerReportEvent");
-const routerFilter = require("./routerFilter");
-const routerReviewEvent = require("./routerReviewEvent");
-const routerReviewUser = require("./routerReviewUser");
+//todos importacion de rutas
+//* rutas de usuarios
+const routerUser = require('./routerUser')
+const routerReportUser = require('./routerReportUser');
+const routerReviewUser = require('./routerReviewUser');
 const routerUserEvent = require("./routerUserEvent");
-const routerSendMail = require("./routerSendMail");
+const routerReportEvent = require('./routerReportEvent');
+const routerReviewEvent = require('./routerReviewEvent');
 const routerAdmins = require("./routerAdmins");
+const routerChatPersonal = require('./routerChatPersonal');
+const routerChatEvent = require('./routerChatEvent');
+const routerSendMail = require("./routerSendMail");
+const routerFilter = require('./routerFilter');
 
-router.use("/events", routerEvents); //body
-router.use("/events", routerUserEvent);
-router.use("/filter", routerFilter);
-router.use("/users", routerUser);
+//todos declaracion de rutas
+//* rutas de usuarios
 router.use("/reportuser", routerReportUser);
+router.use("/reviewuser", routerReviewUser);
+router.use("/users", routerUser);
 router.use("/reportevent", routerReportEvent);
 router.use("/reviewevent", routerReviewEvent);
-router.use("/reviewuser", routerReviewUser);
-router.use("/send-mail", routerSendMail);
+router.use("/events", routerUserEvent);
+//* rutas de filtros
+router.use("/filter", routerFilter);
+//* rutas de admins
 router.use("/", routerAdmins);
+router.use('/events', routerChatPersonal)
+router.use('/events', routerChatEvent)
+router.use("/send-mail", routerSendMail);
 
 module.exports = router;
