@@ -1,8 +1,7 @@
 const { Router } = require("express");
-
+const io = require('../../index.js')
 const {
-    startChatPersonal,
-    getPersonalChats,
+    getPersonalChatsByUsers,
     createPersonalChat
 } = require("../controllers/controllerChatPersonal.js");
 
@@ -21,18 +20,26 @@ const router = Router();
 // })
 
 router.post("/", async (req, res) => {
-const { senderId, receiverId, message } = req.body;
+const { senderUserName, senderId, receiverId, message } = req.body;
 try {
-    if (  !senderId || !receiverId) {
+    if (  
+        !senderId ||
+        !receiverId ||
+        !senderUserName
+         ) {
     throw Error("Falta información para crear el chat personal.");
     }
-
+    
+   
     const newPersonalChat = await createPersonalChat({
     senderId,
     receiverId,
     message,
     senderUserName
     });
+    
+    const roomName = `${senderId}-${receiverId}`
+    io.sockets.in(roomName).emit("chatPersonalMessage", newPersonalChat);
 
     return res.status(200).json(newPersonalChat);
 } catch (error) {
@@ -51,7 +58,7 @@ router.get("/", async (req, res) => {
       }
   
       const personalChats = await getPersonalChatsByUsers(senderId, receiverId);
-  
+      console.log(personalChats);
       return res.status(200).json(personalChats);
     } catch (error) {
       console.log(error);
