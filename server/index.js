@@ -94,7 +94,6 @@ io.on("connection", (socket) => {
     // socket.broadcast.emit("getMessagesEvent", allMessages)
   });
 });
-
 conn.sync({ force: false }).then(() => {
   console.log("Base de datos conectada");
   // io.listen(3001, () => {
