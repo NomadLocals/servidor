@@ -38,7 +38,7 @@ try {
     senderUserName
     });
     
-    const roomName = `${senderId}-${receiverId}`;
+    const roomName = `${senderId}-${receiverId}`
     io.sockets.in(roomName).emit("chatPersonalMessage", newPersonalChat);
 
     return res.status(200).json(newPersonalChat);
