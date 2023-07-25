@@ -5,7 +5,7 @@ const {
   ReviewUser,
   ReportEvent,
   ReviewEvent,
-} = require("../db");
+} = require("../db.js");
 
 const getForAdminUser = async () => {
   try {
@@ -146,9 +146,9 @@ const putForAdminUser = async (userData, idPut) => {
 
 const getForAdminResetUser = async (idUser) => {
   try {
-    const user = await Users.findByPk(idUser, {paranoid: false,});
+    const user = await Users.findByPk(idUser, {paranoid: false});
     if (user) {
-      await user.update({ deletedAt: null });
+      await user.restore();
     }
     return user;
   } catch (error) {
@@ -160,7 +160,7 @@ const getForAdminResetEvent = async (idEvent) => {
   try {
     const event = await Events.findByPk(idEvent, {paranoid: false,});
     if (event) {
-      await event.update({ deletedAt: null });
+      await event.restore();
     }
     return event;
   } catch (error) {

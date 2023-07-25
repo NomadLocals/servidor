@@ -133,7 +133,7 @@ router.get('/admin/:id/userreset', async (req, res) => {
     const isAdmin = await Users.findByPk(id)
     if (isAdmin.admin) {
       const user = await getForAdminResetUser(idUser);
-      if (users) return res.status(200).json(user);
+      if (user) return res.status(200).json(user);
       return res.status(404).json({error: 'Lo sentimos no pudimos obtener los usuarios'});
     } else {
       res.status(404).json({error: 'Lo sentimos Usted no es un ADMINISTRADOR'});
