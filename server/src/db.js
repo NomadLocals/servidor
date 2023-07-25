@@ -8,23 +8,23 @@ const { DB_USER, DB_PASSWORD, DB_HOST, DB_RENDER } = process.env;
 
 // !! este sequelize es para trabajar en produccion... cuando hay que modificar cosa en la DB
 
-const sequelize = new Sequelize(
-  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/nomadlocals`,
-  {
-    logging: false,
-    native: false,
-  }
-);
+// const sequelize = new Sequelize(
+//   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/nomadlocals`,
+//   {
+//     logging: false,
+//     native: false,
+//   }
+// );
 
 //! este sequelize es para RENDERIZADO... DEPLOY DB en render.s.
 
-// const sequelize = new Sequelize(DB_RENDER, {
-//   logging: false,
-//   native: false,
-//   dialectOptions: {
-//     ssl: true, // Deshabilitar la conexión SSL/TLS
-//   },
-// });
+const sequelize = new Sequelize(DB_RENDER, {
+  logging: false,
+  native: false,
+  dialectOptions: {
+    ssl: true, // Deshabilitar la conexión SSL/TLS
+  },
+});
 
 const basename = path.basename(__filename);
 
@@ -56,7 +56,7 @@ const {
   ReviewUser,
   ReviewEvent,
   ChatEvent,
-  ChatPersonal
+  ChatPersonal,
 } = sequelize.models;
 
 Users.belongsToMany(Events, { through: "Users_Events", as: "Events" });
@@ -84,7 +84,6 @@ ChatPersonal.belongsTo(Users, { as: "sender", foreignKey: "senderId" });
 Users.hasMany(ChatPersonal, { foreignKey: "receiverId" });
 ChatPersonal.belongsTo(Users, { as: "receiver", foreignKey: "receiverId" });
 
-
 Users.hasMany(ReportUser, { as: "reportUser", foreignKey: "idUserReporter" });
 ReportUser.belongsTo(Users, { as: "reportUser", foreignKey: "idUserReporter" });
 
@@ -108,8 +107,6 @@ ReviewEvent.belongsTo(Events, {
   as: "reviewEvent",
   foreignKey: "idEventReview",
 });
-
-
 
 module.exports = {
   ...sequelize.models,
