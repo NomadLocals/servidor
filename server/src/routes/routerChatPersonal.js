@@ -20,9 +20,17 @@ const router = Router();
 // })
 
 router.post("/", async (req, res) => {
-const { senderUserName, senderId, receiverId, message } = req.body;
+const { senderUserName, message } = req.body;
+
+
+const users = roomName.split('-')
+  
+  const senderId= users[0];
+  const receiverId= users[1];
+
+const id = roomName
 try {
-    if (  
+    if ( 
         !senderId ||
         !receiverId ||
         !senderUserName
@@ -32,14 +40,14 @@ try {
     
    
     const newPersonalChat = await createPersonalChat({
+      id,
     senderId,
     receiverId,
     message,
     senderUserName
     });
     
-    const roomName = `${senderId}-${receiverId}`
-    io.sockets.in(roomName).emit("chatPersonalMessage", newPersonalChat);
+    sockets.to(roomName).emit("chatPersonalMessage", newPersonalChat);
 
     return res.status(200).json(newPersonalChat);
 } catch (error) {
@@ -50,22 +58,31 @@ try {
 }
 });
 
-router.get("/", async (req, res) => {
-    const { senderId, receiverId } = req.query; 
+router.get("/:roomName", async (req, res) => {
+    const  roomName  = req.params.roomName; 
+    console.log(req.params.roomName);
+    const users = roomName.split("-");
+    console.log(users)
+    // const senderId = users[0]
+    // const receiverId = users [1]
+
+    // console.log(senderId)
+    // console.log(receiverId)
+
     try {
-      if (!senderId || !receiverId) {
+      if (!roomName) {
         throw Error("Falta información para obtener el chat personal.");
       }
-  
-      const personalChats = await getPersonalChatsByUsers(senderId, receiverId);
-      console.log(personalChats);
-      return res.status(200).json(personalChats);
-    } catch (error) {
-      console.log(error);
-      return res
+      
+        const personalChats = await getPersonalChatsByUsers(roomName);
+        console.log(personalChats);
+        return res.status(200).json(personalChats);      
+      } catch (error) {
+        console.log(error);
+        return res
         .status(500)
         .json({ message: "Error al obtener los chats personales." });
-    }
+      }
   });
 
 module.exports = router;

@@ -25,36 +25,43 @@ const { createPersonalChat, getPersonalChatsByUsers } = require ('./src/controll
 
 
 io.on("connection", (socket) => {
+
+
   console.log(`client connected: ${socket.id}`);
 
-  socket.on("startPersonalChat", async ({ senderId, receiverId }) => {
-    const roomName = `${senderId}-${receiverId}`;
+  socket.on("startPersonalChat", async (roomName) => {
     socket.join(roomName);
   });
-
-  socket.on("chatPersonalMessage", async ({ senderId, receiverId, senderUserName, message }) => {
-    // console.log(senderId, receiverId, senderUserName, message)
-    try {
-      
-        const chat = await createPersonalChat({ senderId, receiverId, message, senderUserName: senderUserName });
-        // console.log(chat)
-      
-      // Emitir el evento "chatPersonalMessage" con el nuevo mensaje
-      const messageData = {
-        receiverId: chat.receiverId,
-        senderId: chat.senderId,
-        senderUserName: chat.senderUserName,
-        message: chat.message,
-      };
-      const roomName = `${senderId}-${receiverId}`;
-      io.to(roomName).emit("chatPersonalMessage", messageData);
-    } catch (error) {
-      console.error(error);
-    }
+  
+  socket.on("joinPersonalChat", (roomName) => {
+    socket.join(roomName);
   });
+  
 
-  socket.on('getPersonalMessage', async ({senderId, receiverId}) => {
-    const allMessages = await getPersonalChatsByUsers(senderId, receiverId);
+  // socket.on("chatPersonalMessage", async ({ roomName, senderId, receiverId, senderUserName, message }) => {
+
+  //   try {
+      
+  //       const chat = await createPersonalChat({senderId, receiverId, message, senderUserName });
+  //       // console.log(chat)
+      
+  //     // Emitir el evento "chatPersonalMessage" con el nuevo mensaje
+  //     const messageData = {
+  //       senderId: senderId,
+  //       senderUserName: senderUserName,
+  //       message: message,
+  //     };
+  //     // const roomName = [senderId, receiverId].sort().join("-");
+  //     // console.log(roomName)
+  //     io.to(roomName).emit("chatPersonalMessage", messageData);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // });
+
+  socket.on('getPersonalMessage', async ({roomName}) => {
+    console.log({roomName})
+    const allMessages = await getPersonalChatsByUsers(roomName);
     // const historial = {
     //   usuario: allMessages.userName,
     //   message: allMessages.message,
@@ -63,21 +70,20 @@ io.on("connection", (socket) => {
     socket.broadcast.emit('getPersonalMessage', allMessages)
   })
 
-  // socket.on("chatPersonalMessage", async ({senderId, receiverId, senderUserName, message}) => {
+  socket.on("chatPersonalMessage", async ({senderId, receiverId, senderUserName, message}) => {
 
-  //   const newPersonalChat = await createPersonalChat({senderId, receiverId, senderUserName, message})
+    const newPersonalChat = await createPersonalChat({senderId, receiverId, senderUserName, message})
 
-  //   const user = await Users.findByPk(senderId)
-  //   // const message = `${message}`;
-  //   const messageData = {
-  //     senderId: senderId,
-  //     senderUsername: senderUserName,
-  //     message: message,
-  //     receiverId: receiverId
-  //   };
-  //   const roomName = `${senderId}-${receiverId}`;
-  //   socket.to(roomName).emit("chatPersonalMessage", messageData);
-  // });
+    const user = await Users.findByPk(senderId)
+    // const message = `${message}`;
+    const messageData = {
+      senderId: senderId,
+      senderUsername: senderUserName,
+      message: message,
+      receiverId: receiverId
+    };
+    socket.emit("chatPersonalMessage", messageData);
+  });
 
 
   socket.on("chatEventMessage", async ({ userName,eventId, senderId, message }) => {
@@ -105,7 +111,7 @@ io.on("connection", (socket) => {
 });
   
   
-conn.sync({ force: true }).then(() => {
+conn.sync({ force: false }).then(() => {
   console.log("Base de datos conectada");
   // io.listen(3001, () => {
   //   console.log(`Servidor iniciado en ${PORT}`);

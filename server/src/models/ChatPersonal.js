@@ -5,7 +5,7 @@ const uuid = uuidv4();
 module.exports = (sequelize) => {
     sequelize.define("ChatPersonal", {
         id: {
-            type: DataTypes.UUID,
+            type: DataTypes.STRING,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
@@ -21,6 +21,10 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        roomName1: {
+            type: DataTypes.TEXT,
+            alowwNull: false
+        }
     },
     {
         paranoid: true,
