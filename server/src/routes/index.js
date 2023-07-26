@@ -1,5 +1,7 @@
 const { Router } = require("express");
 const router = Router();
+const express = require("express");
+const path = require("path");
 
 //todos importacion de rutas
 //* rutas de usuarios
@@ -21,6 +23,8 @@ const routerChatPersonal = require("./routerChatPersonal");
 //* rutas de emails
 const routerSendMail = require("./routerSendMail");
 
+
+
 //todos declaracion de rutas
 //* rutas de usuarios
 router.use("/reportuser", routerReportUser);
@@ -40,5 +44,6 @@ router.use("/events", routerChatEvent);
 router.use("/chat/personal", routerChatPersonal);
 //* rutas de emails
 router.use("/send-mail", routerSendMail);
+
 
 module.exports = router;
