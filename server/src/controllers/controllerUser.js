@@ -102,7 +102,7 @@ const updateUserById = async (id, userData) => {
   try {
     const user = await Users.findByPk(id);
     if (!user) {
-      return { message: "Evento no encontrado" };
+      return { message: "Usuario no encontrado" };
     }
     await user.update(userData);
     const updatedUser = await Users.findByPk(id);
