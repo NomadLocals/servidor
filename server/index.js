@@ -1,13 +1,9 @@
-const { conn, ChatPersonal, Users } = require("./src/db.js");
+const { conn, Users } = require("./src/db.js");
 require("dotenv").config();
 const {Server} = require('socket.io');
-const http = require('http');
-const {Op} = require('sequelize')
 
 const server = require('./src/server.js');
 const PORT = 3001
-
-// const app = http.createServer(server);
 const app = server.listen(PORT, () => {
   console.log(`Servidor iniciado en ${PORT}`);
 });
@@ -16,8 +12,6 @@ const io  = new Server(app, {
     origin: '*',
   }
 })
-
-
 
 // chat socket.io
 const {createEventChat, getEventChatsByEvent } = require ('./src/controllers/controllerChatEvent.js')
@@ -36,38 +30,14 @@ io.on("connection", (socket) => {
   socket.on("joinPersonalChat", (roomName) => {
     socket.join(roomName);
   });
-  
-
-  // socket.on("chatPersonalMessage", async ({ roomName, senderId, receiverId, senderUserName, message }) => {
-
-  //   try {
-      
-  //       const chat = await createPersonalChat({senderId, receiverId, message, senderUserName });
-  //       // console.log(chat)
-      
-  //     // Emitir el evento "chatPersonalMessage" con el nuevo mensaje
-  //     const messageData = {
-  //       senderId: senderId,
-  //       senderUserName: senderUserName,
-  //       message: message,
-  //     };
-  //     // const roomName = [senderId, receiverId].sort().join("-");
-  //     // console.log(roomName)
-  //     io.to(roomName).emit("chatPersonalMessage", messageData);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // });
 
   socket.on('getPersonalMessage', async (roomName) => {
-    console.log(roomName)
     const allMessages = await getPersonalChatsByUsers(roomName);
     const historial = {
       usuario: allMessages.userName,
       message: allMessages.message,
     }
     socket.emit('getPersonalMessage', historial)
-    // socket.broadcast.emit('getPersonalMessage', allMessages)
   })
 
   socket.on("chatPersonalMessage", async ({senderId, receiverId, senderUserName, message}) => {
@@ -81,7 +51,6 @@ io.on("connection", (socket) => {
       receiverId: receiverId
     };
     const roomName = [senderId, receiverId].sort().join("-");
-    console.log(roomName)
     io.to(roomName).emit("chatPersonalMessage", messageData);
   });
 
