@@ -16,10 +16,6 @@ const createPersonalChat = async ({
         message,
         senderUserName
       });
-  
-      // Asociar el chat personal con los usuarios correspondientes
-      await chatPersonal.setSender(senderId);
-      await chatPersonal.setReceiver(receiverId);
 
       // io.sockets.in(roomName).emit("chatPersonalMessage", chatPersonal);
       return chatPersonal;
@@ -67,7 +63,10 @@ const createPersonalChat = async ({
   //   }
   // };
 
-  const getPersonalChatsByUsers = async (senderId, receiverId) => {
+  const getPersonalChatsByUsers = async (roomName) => {
+    const users = roomName.split('-')
+    const senderId= users[0];
+    const receiverId= users[1];
     try {
       const chats = await ChatPersonal.findAll({
         where: {
