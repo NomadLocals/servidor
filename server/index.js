@@ -21,7 +21,7 @@ const io  = new Server(app, {
 
 // chat socket.io
 const {createEventChat, getEventChatsByEvent } = require ('./src/controllers/controllerChatEvent.js')
-const { createPersonalChat, getPersonalChatsByUsers } = require ('./src/controllers/controllerChatPersonal.js')
+// const { createPersonalChat, getPersonalChatsByUsers } = require ('./src/controllers/controllerChatPersonal.js')
 
 
 io.on("connection", (socket) => {
