@@ -137,7 +137,7 @@ const putForAdminUser = async (userData, idPut) => {
       return { message: "Evento no encontrado" };
     }
     await user.update(userData);
-    const updatedUser = await Users.findByPk(idPut);
+    const updatedUser = await Users.scope().findByPk(idPut);
     return updatedUser;
   } catch (error) {
     console.log(error);
@@ -148,7 +148,7 @@ const getForAdminResetUser = async (idUser) => {
   try {
     const user = await Users.findByPk(idUser, {paranoid: false});
     if (user) {
-      await user.restore();
+      await user.restore()
     }
     return user;
   } catch (error) {

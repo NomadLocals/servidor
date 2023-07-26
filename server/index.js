@@ -1,6 +1,7 @@
-const { conn,  Users } = require("./src/db.js");
+const { conn, Users } = require("./src/db.js");
 require("dotenv").config();
 const {Server} = require('socket.io');
+
 const server = require('./src/server.js');
 const PORT = 3001
 const app = server.listen(PORT, () => {
@@ -11,6 +12,13 @@ const io  = new Server(app, {
     origin: '*',
   }
 })
+// importaciones para la documentacion de la api
+const path = require("path");
+const marked = require('marked-gfm-heading-id');
+const { parse } = require('marked');
+// para la documentacion de la api
+const fs = require('fs');
+
 // importaciones para la documentacion de la api
 const path = require("path");
 const marked = require('marked-gfm-heading-id');
@@ -119,7 +127,10 @@ io.on("connection", (socket) => {
     socket.emit('getMessagesEvent', historial);
   })
 });
-
+  
+  
+  
+  
 conn.sync({ force: true }).then(() => {
   console.log("Base de datos conectada");
 });
