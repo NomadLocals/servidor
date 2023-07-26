@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        roomName1: {
+        roomName: {
             type: DataTypes.TEXT,
             alowwNull: false
         }

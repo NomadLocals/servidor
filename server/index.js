@@ -59,21 +59,19 @@ io.on("connection", (socket) => {
   //   }
   // });
 
-  socket.on('getPersonalMessage', async ({roomName}) => {
-    console.log({roomName})
+  socket.on('getPersonalMessage', async (roomName) => {
+    console.log(roomName)
     const allMessages = await getPersonalChatsByUsers(roomName);
-    // const historial = {
-    //   usuario: allMessages.userName,
-    //   message: allMessages.message,
-    // }
-    socket.emit('getPersonalMessage', allMessages)
-    socket.broadcast.emit('getPersonalMessage', allMessages)
+    const historial = {
+      usuario: allMessages.userName,
+      message: allMessages.message,
+    }
+    socket.emit('getPersonalMessage', historial)
+    // socket.broadcast.emit('getPersonalMessage', allMessages)
   })
 
   socket.on("chatPersonalMessage", async ({senderId, receiverId, senderUserName, message}) => {
-
     const newPersonalChat = await createPersonalChat({senderId, receiverId, senderUserName, message})
-
     const user = await Users.findByPk(senderId)
     // const message = `${message}`;
     const messageData = {
@@ -82,7 +80,9 @@ io.on("connection", (socket) => {
       message: message,
       receiverId: receiverId
     };
-    socket.emit("chatPersonalMessage", messageData);
+    const roomName = [senderId, receiverId].sort().join("-");
+    console.log(roomName)
+    io.to(roomName).emit("chatPersonalMessage", messageData);
   });
 
 
