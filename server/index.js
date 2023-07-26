@@ -1,10 +1,16 @@
-const { conn, Users } = require("./src/db.js");
+const { conn, ChatPersonal, Users } = require("./src/db.js");
 require("dotenv").config();
 const {Server} = require('socket.io');
 const http = require('http');
+const {Op} = require('sequelize')
 
 const server = require('./src/server.js');
 const PORT = 3001
+// importaciones para la documentacion de la api
+const path = require("path");
+const marked = require('marked-gfm-heading-id');
+const { parse } = require('marked');
+// importaciones para la documentacion de la api
 
 // const app = http.createServer(server);
 const app = server.listen(PORT, () => {
@@ -15,51 +21,94 @@ const io  = new Server(app, {
     origin: '*',
   }
 })
+// para la documentacion de la api
+const fs = require('fs');
 
-
+server.get('/', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'README.md');
+  
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Error interno del servidor');
+    }
+    
+    const htmlContent = parse(data);
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Documentación API</title>
+          <style>
+      body {
+        background-color: black;
+        color: #CCCCCC;
+        font-family: 'Arial', sans-serif;
+        font-size: 18px;
+        text-align: justify;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        text-align: center;
+      }
+      img {
+        position: relative;
+        left: 20%;
+      }
+    </style>
+        </head>
+        <body>
+          ${htmlContent}
+        </body>
+      </html>
+    `);
+  });
+});
+// para la documentacion de la api
 
 // chat socket.io
 const {createEventChat, getEventChatsByEvent } = require ('./src/controllers/controllerChatEvent.js')
-const { startChatPersonal, getPersonalChatsByEvent } = require ('./src/controllers/controllerChatPersonal.js')
+// const { createPersonalChat, getPersonalChatsByUsers } = require ('./src/controllers/controllerChatPersonal.js')
+
+
 io.on("connection", (socket) => {
   console.log(`client connected: ${socket.id}`);
 
-  socket.on("startPersonalChat", async ({senderId, receiverId}) => {
-    console.log(senderId)
-    console.log(receiverId)
-    
-    // console.log("Received startPersonalChat with senderId:", senderId, "and receiverId:", receiverId);
-    // const roomName = `${data.senderId}-${data.receiverId}`;
-    // socket.join(roomName);
-    // const senderId = senderId
+  socket.on("startPersonalChat", async ({ senderId, receiverId }) => {
+    const roomName = `${senderId}-${receiverId}`;
+    socket.join(roomName);
+  });
+
+  socket.on("chatPersonalMessage", async ({ senderId, receiverId, senderUserName, message }) => {
+    // console.log(senderId, receiverId, senderUserName, message)
     try {
-          // Aquí va tu lógica para crear el chat personal en la base de datos
-          // Puedes usar la función createPersonalChat que ya tienes implementada
-          const newPersonalChat = await startChatPersonal({
-            senderId,
-            receiverId,
-          });
-          
-    
-          // Emite el evento "personalChatCreated" con el nuevo chat personal (incluyendo mensajes)
-          io.to(senderId).emit("personalChatCreated", newPersonalChat);
-          io.to(receiverId).emit("personalChatCreated", newPersonalChat);
-        } catch (error) {
-          console.error(error);
-        }
+      
+        const chat = await createPersonalChat({ senderId, receiverId, message, senderUserName: senderUserName });
+        // console.log(chat)
+      
+      // Emitir el evento "chatPersonalMessage" con el nuevo mensaje
+      const messageData = {
+        receiverId: chat.receiverId,
+        senderId: chat.senderId,
+        senderUserName: chat.senderUserName,
+        message: chat.message,
+      };
+      const roomName = `${senderId}-${receiverId}`;
+      io.to(roomName).emit("chatPersonalMessage", messageData);
+    } catch (error) {
+      console.error(error);
+    }
   });
 
-  socket.on("chatPersonalMessage", (data) => {
+  socket.on('getPersonalMessage', async ({senderId, receiverId}) => {
+    const allMessages = await getPersonalChatsByUsers(senderId, receiverId);
+    // const historial = {
+    //   usuario: allMessages.userName,
+    //   message: allMessages.message,
+    // }
+    socket.emit('getPersonalMessage', allMessages)
+    socket.broadcast.emit('getPersonalMessage', allMessages)
+  })
 
-    const message = `${data.message}`;
-    const messageData = {
-      senderId: data.senderId,
-      senderUsername: data.senderUsername,
-      message: message,
-    };
-    const roomName = `${data.senderId}-${data.receiverId}`;
-    socket.to(roomName).emit("chatPersonalMessage", messageData);
-  });
 
 
   socket.on("chatEventMessage", async ({ userName,eventId, senderId, message }) => {
@@ -87,7 +136,9 @@ io.on("connection", (socket) => {
 });
   
   
-conn.sync({ force: false }).then(() => {
+  
+  
+conn.sync({ force: true }).then(() => {
   console.log("Base de datos conectada");
   // io.listen(3001, () => {
   //   console.log(`Servidor iniciado en ${PORT}`);
