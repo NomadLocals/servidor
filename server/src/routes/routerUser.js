@@ -49,6 +49,7 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const userData = req.body;
+
   try {
     const updatedUser = await updateUserById(id, userData);
     res.status(200).json(updatedUser);
