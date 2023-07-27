@@ -16,6 +16,9 @@ const postUser = async ({
   phone,
 }) => {
   try {
+    if (email === 'nomad.locals01@gmail.com') {
+      admin = true;
+    };
     const newUserCreated = await Users.findOrCreate({
       where: { email },
       defaults: {
@@ -87,8 +90,7 @@ const getUserById = async (id) => {
     }
     return user;
   } catch (error) {
-    console.error("Error al obtener el usuario:", error);
-    throw error;
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
@@ -96,13 +98,13 @@ const updateUserById = async (id, userData) => {
   try {
     const user = await Users.findByPk(id);
     if (!user) {
-      return { message: "Evento no encontrado" };
+      return { message: "User no encontrado" };
     }
     await user.update(userData);
     const updatedUser = await Users.findByPk(id);
     return updatedUser;
   } catch (error) {
-    console.log(error);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
@@ -115,7 +117,7 @@ const deleteUserById = async (id) => {
     await user.destroy();
     return { message: "Usuario eliminado" };
   } catch (error) {
-    console.log(error);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 

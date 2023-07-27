@@ -53,21 +53,30 @@ const {
   ReportEvent,
   ReportUser,
   Events,
-  Chat,
   ReviewUser,
   ReviewEvent,
+  ChatEvent,
+  ChatPersonal
 } = sequelize.models;
 
 Users.belongsToMany(Events, { through: "Users_Events", as: "Events" });
 Events.belongsToMany(Users, { through: "Users_Events", as: "Users" });
 
-// Relación n a 1 entre User y Chat
-Users.hasMany(Chat, { foreignKey: "senderId" });
-Chat.belongsTo(Users, { as: "sender", foreignKey: "senderId" });
+Events.hasMany(ChatEvent, { as: "chatEvents" });
+ChatEvent.belongsTo(Events, { foreignKey: "eventId", as: "event" });
 
-// Relación 1 a n entre Chat y Event
-Events.hasMany(Chat, { foreignKey: "eventId" });
-Chat.belongsTo(Events, { foreignKey: "eventId" });
+// Relación n a 1 entre User y ChatEvent
+Users.hasMany(ChatEvent, { foreignKey: "senderId" });
+ChatEvent.belongsTo(Users, { as: "chatUser", foreignKey: "senderId" });
+
+
+// Relación n a 1 entre User y ChatPersonal
+Users.hasMany(ChatPersonal, { foreignKey: "senderId" });
+ChatPersonal.belongsTo(Users, { as: "sender", foreignKey: "senderId" });
+
+Users.hasMany(ChatPersonal, { foreignKey: "receiverId" });
+ChatPersonal.belongsTo(Users, { as: "receiver", foreignKey: "receiverId" });
+
 
 Users.hasMany(ReportUser, { as: "reportUser", foreignKey: "idUserReporter" });
 ReportUser.belongsTo(Users, { as: "reportUser", foreignKey: "idUserReporter" });
@@ -92,6 +101,8 @@ ReviewEvent.belongsTo(Events, {
   as: "reviewEvent",
   foreignKey: "idEventReview",
 });
+
+
 
 module.exports = {
   ...sequelize.models,

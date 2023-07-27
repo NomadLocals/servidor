@@ -33,7 +33,6 @@ const removeUserFromEvent = async (eventId, userId) => {
 
     return { message: "User removed from event" };
   } catch (error) {
-    console.log(error);
     return { message: "Error removing user from event" };
   }
 };

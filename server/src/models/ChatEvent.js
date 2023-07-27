@@ -1,22 +1,27 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  sequelize.define("Chat", {
+  sequelize.define("ChatEvent", {
     id: {
       type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
     senderId: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    receiverId: {
+    userName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    eventId: {
-      type: DataTypes.UUID,
+    message: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
+  },
+  {
+    paranoid: true,
+    timestamps: true,
   });
 };

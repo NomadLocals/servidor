@@ -22,7 +22,6 @@ router.delete("/:id/users", async (req, res) => {
   try {
     const { id } = req.params;
     const { userId } = req.query;
-    console.log(userId);
     const result = await removeUserFromEvent(id, userId);
     res.status(200).json(result);
   } catch (error) {

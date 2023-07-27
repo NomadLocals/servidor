@@ -42,7 +42,7 @@ const deleteReportUser = async (id) => {
     await report.destroy();
     return { message: "Report deleted successfully" };
   } catch (error) {
-    console.log(error.message);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 

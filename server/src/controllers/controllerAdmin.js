@@ -9,7 +9,8 @@ const {
 
 const getForAdminUser = async () => {
   try {
-    const allUsers = await Users.findAll({
+    const allUsers = await Users.scope().findAll({
+      paranoid: false,
       include: [
         {
           model: ReportUser,
@@ -27,13 +28,14 @@ const getForAdminUser = async () => {
     });
     return allUsers;
   } catch (error) {
-    console.log(error);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
 const getForAdminEvent = async () => {
   try {
-    const allevents = await Events.findAll({
+    const allevents = await Events.scope().findAll({
+      paranoid: false,
       include: [
         {
           model: ReportEvent,
@@ -52,13 +54,14 @@ const getForAdminEvent = async () => {
 
     return allevents;
   } catch (error) {
-    console.log(error);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
 const getForAdminReportUser = async () => {
   try {
-    const allReport = await ReportUser.findAll({
+    const allReport = await ReportUser.scope().findAll({
+      paranoid: false,
       include: [
         {
           model: Users,
@@ -68,13 +71,14 @@ const getForAdminReportUser = async () => {
     });
     return allReport;
   } catch (error) {
-    console.log(error.message);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
 const getForAdminReportEvent = async () => {
   try {
-    const allReport = await ReportEvent.findAll({
+    const allReport = await ReportEvent.scope().findAll({
+      paranoid: false,
       include: [
         {
           model: Events,
@@ -84,7 +88,7 @@ const getForAdminReportEvent = async () => {
     });
     return allReport;
   } catch (error) {
-    console.log(error.message);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
@@ -92,7 +96,8 @@ const getForAdminReviewUser = async () => {
   try {
   } catch (error) {}
   try {
-    const allReview = await ReviewUser.findAll({
+    const allReview = await ReviewUser.scope().findAll({
+      paranoid: false,
       include: [
         {
           model: Users,
@@ -110,7 +115,8 @@ const getForAdminReviewEvent = async () => {
   try {
   } catch (error) {}
   try {
-    const allReview = await ReviewEvent.findAll({
+    const allReview = await ReviewEvent.scope().findAll({
+      paranoid: false,
       include: [
         {
           model: Events,
@@ -120,7 +126,45 @@ const getForAdminReviewEvent = async () => {
     });
     return allReview;
   } catch (error) {
-    console.log(error.message);
+    res.status(500).json({error: 'Error de servidor'});
+  }
+};
+
+const putForAdminUser = async (userData, idPut) => {
+  try {
+    const user = await Users.findByPk(idPut);
+    if (!user) {
+      return { message: "Evento no encontrado" };
+    }
+    await user.update(userData);
+    const updatedUser = await Users.scope().findByPk(idPut);
+    return updatedUser;
+  } catch (error) {
+    res.status(500).json({error: 'Error de servidor'});
+  }
+};
+
+const getForAdminResetUser = async (idUser) => {
+  try {
+    const user = await Users.findByPk(idUser, {paranoid: false,});
+    if (user) {
+      await user.restore()
+    }
+    return user;
+  } catch (error) {
+    res.status(500).json({error: 'Error de servidor'});
+  }
+};
+
+const getForAdminResetEvent = async (idEvent) => {
+  try {
+    const event = await Events.findByPk(idEvent, {paranoid: false,});
+    if (event) {
+      await event.restore();
+    }
+    return event;
+  } catch (error) {
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
@@ -131,4 +175,7 @@ module.exports = {
   getForAdminReportUser,
   getForAdminEvent,
   getForAdminUser,
+  putForAdminUser,
+  getForAdminResetUser,
+  getForAdminResetEvent,
 };
