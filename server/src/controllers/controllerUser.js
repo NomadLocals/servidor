@@ -90,8 +90,7 @@ const getUserById = async (id) => {
     }
     return user;
   } catch (error) {
-    console.error("Error al obtener el usuario:", error);
-    throw error;
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
@@ -105,7 +104,7 @@ const updateUserById = async (id, userData) => {
     const updatedUser = await Users.findByPk(id);
     return updatedUser;
   } catch (error) {
-    console.log(error);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
@@ -118,7 +117,7 @@ const deleteUserById = async (id) => {
     await user.destroy();
     return { message: "Usuario eliminado" };
   } catch (error) {
-    console.log(error);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 

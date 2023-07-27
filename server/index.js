@@ -13,55 +13,6 @@ const io  = new Server(app, {
   }
 })
 
-// importaciones para la documentacion de la api
-const path = require("path");
-const marked = require('marked-gfm-heading-id');
-const { parse } = require('marked');
-// para la documentacion de la api
-const fs = require('fs');
-
-server.get('/', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'README.md');
-  
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Error interno del servidor');
-    }
-    
-    const htmlContent = parse(data);
-    res.send(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-    <title>Documentación API</title>
-    <style>
-    body {
-      background-color: black;
-      color: #CCCCCC;
-      font-family: 'Arial', sans-serif;
-      font-size: 18px;
-      text-align: justify;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      text-align: center;
-    }
-    img {
-      position: relative;
-      left: 20%;
-    }
-    </style>
-    </head>
-    <body>
-    ${htmlContent}
-    </body>
-    </html>
-    `);
-  });
-});
-// importaciones para la documentacion de la api
-
-
 // chat socket.io
 const {createEventChat, getEventChatsByEvent } = require ('./src/controllers/controllerChatEvent.js')
 const { createPersonalChat, getPersonalChatsByUsers } = require ('./src/controllers/controllerChatPersonal.js')
@@ -92,7 +43,6 @@ io.on("connection", (socket) => {
   socket.on("chatPersonalMessage", async ({senderId, receiverId, senderUserName, message}) => {
     const newPersonalChat = await createPersonalChat({senderId, receiverId, senderUserName, message})
     const user = await Users.findByPk(senderId)
-    // const message = `${message}`;
     const messageData = {
       senderId: senderId,
       senderUsername: senderUserName,
@@ -108,7 +58,7 @@ io.on("connection", (socket) => {
     const newEventChat = await createEventChat({userName ,eventId, senderId, message });
     const user = await Users.findByPk(senderId);
     const dataToSend = {
-    usuario: user.userName, // Asegúrate de que userName sea la propiedad correcta en tu modelo de usuario
+    usuario: user.userName, 
     message: newEventChat.message,
     userName: user.userName,
     senderId: user.id
@@ -124,16 +74,12 @@ io.on("connection", (socket) => {
       message : allMessages.message
     }  
     socket.emit('getMessagesEvent', historial);
-    // socket.broadcast.emit("getMessagesEvent", allMessages)
   })
 });
   
   
   
   
-conn.sync({ force: false }).then(() => {
+conn.sync({ force: true }).then(() => {
   console.log("Base de datos conectada");
-  // io.listen(3001, () => {
-  //   console.log(`Servidor iniciado en ${PORT}`);
-  // });
 });

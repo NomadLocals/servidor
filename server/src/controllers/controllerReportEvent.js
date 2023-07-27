@@ -34,7 +34,7 @@ const deleteReportEvent = async (id) => {
     await report.destroy();
     return { error: "Report deleted successfully" };
   } catch (error) {
-    console.log(error.message);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 

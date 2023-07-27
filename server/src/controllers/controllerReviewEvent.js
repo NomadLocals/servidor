@@ -39,7 +39,7 @@ const deleteReviewEvent = async (id) => {
     await review.destroy();
     return { error: "Review deleted successfully" };
   } catch (error) {
-    console.log(error.message);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 

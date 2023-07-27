@@ -68,7 +68,6 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   try {
     const userById = await getUserById(id);
     if (userById.error) return res.status(404).json(userById);

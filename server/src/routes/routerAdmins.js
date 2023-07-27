@@ -25,7 +25,7 @@ router.get('/admin/:id/users', async (req, res) => {
       res.status(404).json({error: 'Lo sentimos Usted no es un ADMINISTRADOR'});
     }
   } catch (error) {
-    console.log(error.message);
+    res.status(404).json({error: 'Error de servidor'});
   }
 });
 
@@ -41,7 +41,7 @@ router.get('/admin/:id/events', async (req, res) => {
       res.status(404).json({error: 'Lo sentimos Usted no es un ADMINISTRADOR'});
     }
   } catch (error) {
-    console.log(error.message);
+    res.status(404).json({error: 'Error de servidor'});
   }
 });
 
@@ -57,7 +57,7 @@ router.get('/admin/:id/reportuser', async (req, res) => {
       res.status(404).json({error: 'Lo sentimos Usted no es un ADMINISTRADOR'});
     }
   } catch (error) {
-    console.log(error.message);
+    res.status(404).json({error: 'Error de servidor'});
   }
 });
 
@@ -73,7 +73,7 @@ router.get('/admin/:id/reportevent', async (req, res) => {
       res.status(404).json({error: 'Lo sentimos Usted no es un ADMINISTRADOR'});
     }
   } catch (error) {
-    console.log(error.message);
+    res.status(404).json({error: 'Error de servidor'});
   }
 });
 
@@ -89,7 +89,7 @@ router.get('/admin/:id/reviewuser', async (req, res) => {
       res.status(404).json({error: 'Lo sentimos Usted no es un ADMINISTRADOR'});
     }
   } catch (error) {
-    console.log(error.message);
+    res.status(404).json({error: 'Error de servidor'});
   }
 });
 
@@ -105,7 +105,7 @@ router.get('/admin/:id/reviewevent', async (req, res) => {
       res.status(404).json({error: 'Lo sentimos Usted no es un ADMINISTRADOR'});
     }
   } catch (error) {
-    console.log(error.message);
+    res.status(404).json({error: 'Error de servidor'});
   }
 });
 
@@ -133,13 +133,13 @@ router.get('/admin/:id/userreset', async (req, res) => {
     const isAdmin = await Users.findByPk(id)
     if (isAdmin.admin) {
       const user = await getForAdminResetUser(idUser);
-      if (users) return res.status(200).json(user);
+      if (user) return res.status(200).json(user);
       return res.status(404).json({error: 'Lo sentimos no pudimos obtener los usuarios'});
     } else {
       res.status(404).json({error: 'Lo sentimos Usted no es un ADMINISTRADOR'});
     }
   } catch (error) {
-    console.log(error.message);
+    res.status(404).json({error: 'Error de servidor'});
   }
 });
 

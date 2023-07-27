@@ -28,7 +28,7 @@ const getForAdminUser = async () => {
     });
     return allUsers;
   } catch (error) {
-    console.log(error);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
@@ -54,7 +54,7 @@ const getForAdminEvent = async () => {
 
     return allevents;
   } catch (error) {
-    console.log(error);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
@@ -71,7 +71,7 @@ const getForAdminReportUser = async () => {
     });
     return allReport;
   } catch (error) {
-    console.log(error.message);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
@@ -88,7 +88,7 @@ const getForAdminReportEvent = async () => {
     });
     return allReport;
   } catch (error) {
-    console.log(error.message);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
@@ -126,7 +126,7 @@ const getForAdminReviewEvent = async () => {
     });
     return allReview;
   } catch (error) {
-    console.log(error.message);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
@@ -140,7 +140,7 @@ const putForAdminUser = async (userData, idPut) => {
     const updatedUser = await Users.scope().findByPk(idPut);
     return updatedUser;
   } catch (error) {
-    console.log(error);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
@@ -152,7 +152,7 @@ const getForAdminResetUser = async (idUser) => {
     }
     return user;
   } catch (error) {
-    console.log(error);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 
@@ -164,7 +164,7 @@ const getForAdminResetEvent = async (idEvent) => {
     }
     return event;
   } catch (error) {
-    console.log(error);
+    res.status(500).json({error: 'Error de servidor'});
   }
 };
 

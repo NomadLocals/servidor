@@ -12,7 +12,6 @@ const router = Router();
 router.post("/:eventId/chat/event", async (req, res) => {
   const { eventId } = req.params;
   const { userName,senderId, message } = req.body;
-    // console.log(req.params)
 
   try {
     if ( !senderId || !message) {
@@ -45,7 +44,6 @@ router.get("/:eventId/chat/event", async (req, res) => {
 
     return res.status(200).json(eventChats);
   } catch (error) {
-    console.log(error);
     return res
       .status(500)
       .json({ message: "Error al obtener los chats de evento." });

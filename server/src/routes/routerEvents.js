@@ -10,7 +10,6 @@ const {
 const router = Router();
 
 router.post("/", async (req, res) => {
-  console.log(req.body);
   const {
     userId,
     name,

@@ -16,52 +16,13 @@ const createPersonalChat = async ({
         message,
         senderUserName
       });
-
-      // io.sockets.in(roomName).emit("chatPersonalMessage", chatPersonal);
+      
       return chatPersonal;
     } catch (error) {
-      console.error(error);
+      res.status(500).json({error: 'Error de servidor'});
     }
   };
 
-  // const startChatPersonal = async ({senderId, receiverId}) => {
-  //   console.log(senderId)
-  //   console.log(receiverId)
-  //   try {
-  //     // Verificar si ya existe un chat personal entre los dos usuarios
-  //     const existingChat = await ChatPersonal.findOne({
-  //       where: {
-  //         senderId: senderId,
-  //         receiverId: receiverId,
-  //         [Op.or]: [
-  //           { senderId: senderId, receiverId: receiverId },
-  //           { senderId: receiverId, receiverId: senderId },
-  //         ],
-  //       },
-  //       include: [
-  //         { model: Users, as: "sender", attributes: ["id", "userName"] },
-  //         { model: Users, as: "receiver", attributes: ["id", "userName"] },
-  //       ],
-  //     });
-  
-  //     if (existingChat) {
-  //       console.log(existingChat)
-  //       return existingChat;
-  //     } else {
-  //       // Si no existe un chat, crear uno nuevo
-  //       const newChat = await createPersonalChat({
-  //         senderId: senderId,
-  //       receiverId: receiverId,
-  //       message: "", // Puedes inicializar el chat sin mensajes o con un mensaje predeterminado si lo deseas
-  //     });
-      
-  //     return newChat;
-  //   }
-  //   } catch (error) {
-  //     console.log(error.message);
-  //     throw error; // Debes propagar el error para que se maneje en el controlador de la ruta
-  //   }
-  // };
 
   const getPersonalChatsByUsers = async (roomName) => {
     const users = roomName.split('-')

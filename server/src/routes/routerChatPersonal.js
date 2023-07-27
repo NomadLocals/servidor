@@ -8,17 +8,6 @@ const {
 
 const router = Router();
 
-// router.post('/chat/personal', async (req, res) => {
-//     const { senderId, receiverId } = req.body
-//     try {
-//         const newChat = await startChatPersonal( senderId, receiverId);
-//     return res.status(200).json(newChat);
-//     } catch (error) {
-//         console.log(error.message);
-//         return res.status(500).json({ message: "Error al iniciar el chat personal." });
-//     }
-// })
-
 router.post("/", async (req, res) => {
 const { senderUserName, message } = req.body;
 

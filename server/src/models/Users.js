@@ -39,7 +39,7 @@ module.exports = (sequelize) => {
       },
       geolocation: {
         type: DataTypes.JSON,
-        allowNull: false,
+        allowNull: true,
       },
       gender: {
         type: DataTypes.ENUM("Male", "Female", "No specified", "Others"),

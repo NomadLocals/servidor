@@ -12,9 +12,8 @@ server.use(express.json());
     res.header(
       "Access-Control-Allow-Origin",
       "*"
-      // "https://pruebas-mailing.netlify.app"
       );
-      //  update to match the domain you will make the request from
+      
       res.header(
       "Access-Control-Allow-Headers",
       "Origin, X-Requested-With, Content-Type, Accept"
