@@ -11,7 +11,7 @@ server.use(express.json());
   server.use((req, res, next) => {
     res.header(
       "Access-Control-Allow-Origin",
-      "*"
+      "https://nomandlocals.netlify.app"
       );
       
       res.header(
