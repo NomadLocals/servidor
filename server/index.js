@@ -8,9 +8,9 @@ const app = server.listen(PORT, () => {
   console.log(`Servidor iniciado en ${PORT}`);
 });
 const io  = new Server(app, {
-  cors: {
-    origin: 'https://nomandlocals.netlify.app',
-  }
+  // cors: {
+  //   origin: 'https://nomandlocals.netlify.app',
+  // }
 })
 
 // chat socket.io
