@@ -10,6 +10,7 @@ const app = server.listen(PORT, () => {
 const io  = new Server(app, {
   cors: {
     origin: '*',
+    optionsSuccessStatus: 200,
   }
 })
 
