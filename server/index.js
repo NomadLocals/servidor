@@ -9,7 +9,7 @@ const app = server.listen(PORT, () => {
 });
 const io  = new Server(app, {
   cors: {
-    origin: '*',
+    origin: 'https://nomandlocals.netlify.app',
   }
 })
 
