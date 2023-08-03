@@ -80,6 +80,6 @@ io.on("connection", (socket) => {
   
   
   
-conn.sync({ force: true }).then(() => {
+conn.sync({ force: false }).then(() => {
   console.log("Base de datos conectada");
 });
